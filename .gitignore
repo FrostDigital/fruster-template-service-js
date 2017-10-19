@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+db
+log
+.vscode
+.DS_Store
+
+# Fruster health file
+.health
