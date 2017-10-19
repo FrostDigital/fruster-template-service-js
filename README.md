@@ -29,12 +29,12 @@ coming from API Gateway.
 A handler should have a method `handle(req)` and/or `handleHttp(req)` which is the entry point.
 Whatever returned from these methods, either directly or using a promise, will be used as response.
 
-## Repo 
+### Repo 
 
 Repo is short for _repository_ which is a class that encapsulates database queries and exposes a API for other
 classes to use (commonly a handler).
 
-## Client
+### Client
 
 A client is used to interact with other peer services. The client encapsulates code for sending
 requests and parsing response and exposes a nice, readable API.
