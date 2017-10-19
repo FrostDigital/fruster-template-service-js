@@ -1,0 +1,1 @@
+# fruster-template-service-js
