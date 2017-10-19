@@ -42,5 +42,11 @@ requests and parsing response and exposes a nice, readable API.
 Create one client per service, or use composition (client A has client B as instance variable) if necesseray to 
 interact with multiple services.
 
+## Code style
 
-
+* Use double qoutes `"` instead of single quotes `'`.
+* Use tabs instead of spaces for indentation.
+* Comment using `jsdoc` standard.
+* Use `fruster-log` for logging - do not use `console.log`.
+* Name files that exports a class with capital camel case, such as `FooHandler.js`.
+* Name other files that does not export a class with kebab case, such as `fruster-template-service.js`.
