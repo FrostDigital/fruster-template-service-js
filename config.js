@@ -17,5 +17,5 @@ module.exports = {
     bus: process.env.BUS || "nats://localhost:4222",
 
     // Mongo database URL
-    mongoUrl: process.env.MONGO_URL || `mongodb://localhost:27017/${constants.serviceName}`
+    mongoUrl: process.env.MONGO_URL || `mongodb://localhost:27017/${constants.SERVICE_NAME}`
 };
