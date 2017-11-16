@@ -12,9 +12,9 @@ const constants = require('./lib/constants');
  */
 service.start(config.bus, config.mongoUrl)
     .then(() => {
-        log.info(`Successfully started ${constants.serviceName}`)
+        log.info(`Successfully started ${constants.SERVICE_NAME}`)
     })
     .catch(err => {
-		log.error(`Failed starting ${constants.serviceName}`, err);
-		process.exit(1);
-	});
+        log.error(`Failed starting ${constants.SERVICE_NAME}`, err);
+        process.exit(1);
+    });
