@@ -2,7 +2,7 @@ const bus = require("fruster-bus");
 const log = require("fruster-log");
 const mongo = require("mongodb");
 const config = require("./config");
-const constants = require("./lib/constants.js");
+const constants = require("./lib/constants");
 const FooRepo = require("./lib/repos/FooRepo");
 
 module.exports = {
