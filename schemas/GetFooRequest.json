@@ -4,7 +4,7 @@
     "type": "object",
     "properties": {
         "id": {
-            "$ref": "Foo#/definitions/id"
+            "$ref": "Foo#/properties/id"
         }
     },
     "required": [ "id" ]

@@ -2,13 +2,6 @@
     "id": "GetFooResponse",
     "description": "Response of service endpoint to get a foo",
     "type": "object",
-    "properties": {
-        "id": {
-            "$ref": "Foo#/id"
-        },
-        "name": {
-            "$ref": "Foo#/name"
-        }
-    },
+    "$ref": "Foo",
     "required": [ "id", "name" ]
 }

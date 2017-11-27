@@ -2,7 +2,7 @@
     "id": "Foo",
     "description": "Foo is an example object",
     "type": "object",
-    "definitions": {
+    "properties": {
         "id": {
             "type": "string",
             "format": "uuid",
