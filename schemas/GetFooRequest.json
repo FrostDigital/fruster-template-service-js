@@ -1,0 +1,11 @@
+{
+    "id": "GetFooRequest",
+    "description": "Request to get a Foo by its id",
+    "type": "object",
+    "properties": {
+        "id": {
+            "$ref": "Foo#/properties/id"
+        }
+    },
+    "required": [ "id" ]
+}

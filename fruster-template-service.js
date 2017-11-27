@@ -4,6 +4,7 @@ const mongo = require("mongodb");
 const config = require("./config");
 const constants = require("./lib/constants");
 const FooRepo = require("./lib/repos/FooRepo");
+const GetFooHandler = require("./lib/handlers/GetFooHandler");
 
 module.exports = {
     start: async (busAddress, mongoUrl) => {
@@ -16,16 +17,20 @@ module.exports = {
 };
 
 function registerHandlers(db) {
-
     const fooRepo = new FooRepo(db);
+    const getFooHandler = new GetFooHandler(fooRepo);
 
-    // HTTP 
-    
-    // TODO
+    // HTTP     
+    // Add HTTP handlers here
     
     // SERVICE
-    
-    // TODO
+    bus.subscribe({
+        subject: constants.endpoints.service.GET_FOO,
+        responseSchema: "GetFooResponse",
+        requestSchema: "GetFooRequest",
+        handle: (req) => getFooHandler.handle(req)
+    })
+    // Add service handlers here
 }  
 
 
