@@ -3,6 +3,8 @@ const service = require("./fruster-template-service");
 const log = require("fruster-log");
 const constants = require('./lib/constants');
 
+require("fruster-health").start();
+
 /**
  * Main entry point for starting the service.
  * 
