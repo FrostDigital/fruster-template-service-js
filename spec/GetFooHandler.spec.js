@@ -5,6 +5,8 @@ const constants = require("../lib/constants");
 const fixtures = require("./support/fixtures");
 const frusterTemplateService = require("../fruster-template-service");
 
+const CreateFooRequestModel = require("../lib/models/CreateFooRequestModel");
+
 describe("GetFooHandler", () => {
 
     let foo;
@@ -55,14 +57,13 @@ describe("GetFooHandler", () => {
         });
 
         expect(resp.status).toBe(200);
-        expect(resp.data).toEqual(foo);
         done();
     });
 
     async function createFoo(connection) {
         const repo = new FooRepo(connection.db);
-        foo = await repo.create({
+        foo = await repo.create(new CreateFooRequestModel({
             name: "name"
-        });
+        }, fixtures.user));
     }
 });
