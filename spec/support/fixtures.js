@@ -11,6 +11,13 @@ class Fixtures {
         };
     }
 
+    get user() {
+        return {
+            id: "7680e430-97b8-4fff-96f6-863312008cb0",
+            name: "Dinuka Thilanga"
+        };
+    }
+
 }
 
 module.exports = new Fixtures();

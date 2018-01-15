@@ -3,5 +3,5 @@
     "description": "Response of service endpoint to get a foo",
     "type": "object",
     "$ref": "Foo",
-    "required": [ "id", "name" ]
+    "required": ["id", "name"]
 }

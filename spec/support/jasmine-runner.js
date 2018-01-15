@@ -1,6 +1,6 @@
 const Jasmine = require("jasmine");
-const SpecReporter = require("jasmine-spec-reporter");
-const noop = function() {};
+const SpecReporter = require("jasmine-spec-reporter").SpecReporter;
+const noop = function () {};
 
 /*
     Bootstraps Jasmine and use the jasmine-spec-reporter which 
@@ -8,7 +8,9 @@ const noop = function() {};
 */
 
 let jrunner = new Jasmine();
-jrunner.configureDefaultReporter({print: noop});  
-jasmine.getEnv().addReporter(new SpecReporter()); 
+jrunner.configureDefaultReporter({
+    print: noop
+});
+jasmine.getEnv().addReporter(new SpecReporter());
 jrunner.loadConfigFile();
 jrunner.execute();
