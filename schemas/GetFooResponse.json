@@ -2,6 +2,26 @@
     "id": "GetFooResponse",
     "description": "Response of service endpoint to get a foo",
     "type": "object",
-    "$ref": "Foo",
-    "required": ["id", "name"]
+    "additionalProperties": false,
+    "properties": {
+        "id": {
+            "$ref": "Foo#/properties/id"
+        },
+        "name": {
+            "$ref": "Foo#/properties/name"
+        },
+        "description": {
+            "$ref": "Foo#/properties/description"
+        },
+        "created": {
+            "$ref": "Foo#/properties/created"
+        },
+        "updated": {
+            "$ref": "Foo#/properties/updated"
+        },
+        "createdBy": {
+            "$ref": "Foo#/properties/createdBy"
+        }
+    },
+    "required": ["id", "name", "created", "createdBy"]
 }
