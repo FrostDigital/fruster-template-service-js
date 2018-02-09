@@ -1,6 +1,7 @@
 const bus = require("fruster-bus");
 const log = require("fruster-log");
 const mongo = require("mongodb");
+const Db = mongo.Db;
 const config = require("./config");
 const constants = require("./lib/constants");
 const docs = require("./lib/docs");
@@ -17,6 +18,9 @@ module.exports = {
     }
 };
 
+/**
+ * @param {Db} db
+ */
 function registerHandlers(db) {
     const fooRepo = new FooRepo(db);
     const getFooHandler = new GetFooHandler(fooRepo);
@@ -27,11 +31,12 @@ function registerHandlers(db) {
     // SERVICE
     bus.subscribe({
         subject: constants.endpoints.service.GET_FOO,
-        responseSchema: "GetFooResponse",
-        requestSchema: "GetFooRequest",
+        requestSchema: constants.schemas.request.GET_FOO,
+        responseSchema: constants.schemas.response.GET_FOO,
+        permissions: [constants.permissions.GET_FOO],
         docs: docs.service.GET_FOO,
         handle: (req) => getFooHandler.handle(req)
-    })
+    });
 
     // Add service handlers here
 }
