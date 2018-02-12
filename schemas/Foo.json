@@ -13,21 +13,38 @@
             "description": "Name of Foo"
         },
         "description": {
-            "type": ["string", "null"],
+            "type": [
+                "string",
+                "null"
+            ],
             "description": "Description of Foo"
         },
         "created": {
-            "type": "string",
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
             "format": "date-time",
             "description": "The organisation created time"
         },
         "updated": {
-            "type": "string",
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
             "format": "date-time",
             "description": "The organisation last updated time"
         },
         "createdBy": {
-            "$ref": "User",
+            "$ref": "User#/properties/id",
             "description": "The organisation created user"
         }
     }

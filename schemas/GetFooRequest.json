@@ -8,5 +8,7 @@
             "$ref": "Foo#/properties/id"
         }
     },
-    "required": ["id"]
+    "required": [
+        "id"
+    ]
 }
