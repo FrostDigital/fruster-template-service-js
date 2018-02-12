@@ -20,25 +20,17 @@
             "description": "Description of Foo"
         },
         "created": {
-            "anyOf": [
-                {
-                    "type": "string"
-                },
-                {
-                    "type": "null"
-                }
+            "type": [
+                "string",
+                "null"
             ],
             "format": "date-time",
             "description": "The organisation created time"
         },
         "updated": {
-            "anyOf": [
-                {
-                    "type": "string"
-                },
-                {
-                    "type": "null"
-                }
+            "type": [
+                "string",
+                "null"
             ],
             "format": "date-time",
             "description": "The organisation last updated time"
