@@ -6,6 +6,7 @@ const config = require("./config");
 const constants = require("./lib/constants");
 const docs = require("./lib/docs");
 const FooRepo = require("./lib/repos/FooRepo");
+const FooManager = require('./lib/managers/FooManager');
 const GetFooHandler = require("./lib/handlers/GetFooHandler");
 
 module.exports = {
@@ -23,7 +24,8 @@ module.exports = {
  */
 function registerHandlers(db) {
     const fooRepo = new FooRepo(db);
-    const getFooHandler = new GetFooHandler(fooRepo);
+    const fooManager = new FooManager(fooRepo);
+    const getFooHandler = new GetFooHandler(fooManager);
 
     // HTTP     
     // Add HTTP handlers here
@@ -32,7 +34,7 @@ function registerHandlers(db) {
     bus.subscribe({
         subject: constants.endpoints.service.GET_FOO,
         requestSchema: constants.schemas.request.GET_FOO,
-        responseSchema: constants.schemas.response.GET_FOO,
+        responseSchema: constants.schemas.response.FOO_WITH_BAR,
         permissions: [constants.permissions.GET_FOO],
         docs: docs.service.GET_FOO,
         handle: (req) => getFooHandler.handle(req)
