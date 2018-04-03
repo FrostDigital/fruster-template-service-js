@@ -27,7 +27,7 @@ function registerHandlers(db) {
     const fooManager = new FooManager(fooRepo);
     const getFooHandler = new GetFooHandler(fooManager);
 
-    // HTTP     
+    // HTTP
     // Add HTTP handlers here
 
     // SERVICE
