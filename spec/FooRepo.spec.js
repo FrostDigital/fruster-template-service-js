@@ -1,30 +1,28 @@
-const testUtils = require("fruster-test-utils");
-const bus = require("fruster-bus");
-const FooRepo = require("../lib/repos/FooRepo");
-const constants = require("../lib/constants");
-const fixtures = require("./support/fixtures");
-const errors = require("../lib/errors");
-const MockBarService = require('./support/MockBarService');
 const Db = require("mongodb").Db;
-
+const bus = require("fruster-bus");
+const frusterTestUtils = require("fruster-test-utils");
+const fixtures = require("./support/fixtures");
+const specConstants = require("./support/spec-constants");
+const errors = require("../lib/errors");
+const FooRepo = require("../lib/repos/FooRepo");
 const FooModel = require('../lib/models/FooModel');
-
 
 describe("FooRepo", () => {
 
 	/** @type {FooRepo} */
 	let repo;
+
 	/** @type {Db} */
 	let db;
 
-	testUtils.startBeforeEach({
-		mockNats: true,
-		mongoUrl: "mongodb://localhost:27017/fruster-template-service-test",
-		afterStart: (connection) => {
-			db = connection.db;
-			repo = new FooRepo(connection.db);
-		}
-	});
+	afterEach(bus.clearClients);
+
+	frusterTestUtils
+		.startBeforeEach(specConstants
+			.testUtilsOptions(async (connection) => {
+				db = connection.db;
+				repo = new FooRepo(connection.db);
+			}));
 
 	it("should create Foo", async done => {
 		const createdFoo = await createFoo(fixtures.foo, fixtures.user);
