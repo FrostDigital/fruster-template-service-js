@@ -33,7 +33,7 @@ function registerHandlers(db) {
 		subject: constants.endpoints.service.GET_FOO,
 		requestSchema: constants.schemas.request.GET_FOO,
 		responseSchema: constants.schemas.response.FOO_WITH_BAR,
-		permissions: [constants.permissions.GET_FOO],
+		permissions: constants.permissions.GET_FOO,
 		docs: docs.service.GET_FOO,
 		handle: (req) => getFooHandler.handle(req)
 	});
@@ -41,7 +41,13 @@ function registerHandlers(db) {
 	// Add service handlers here
 }
 
-
+/**
+ * @param {Db} db
+ */
 function createIndexes(db) {
-	// TODO
+	// Create indexes as needed
+	db.collection(constants.collections.FOOS)
+		.createIndex({
+			id: 1
+		});
 }
