@@ -41,7 +41,13 @@ function registerHandlers(db) {
 	// Add service handlers here
 }
 
-
+/**
+ * @param {Db} db
+ */
 function createIndexes(db) {
-	// TODO
+	// Create indexes as needed
+	db.collection(constants.collections.FOOS)
+		.createIndex({
+			id: 1
+		});
 }
