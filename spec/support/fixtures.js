@@ -1,7 +1,3 @@
-let fixtures = module.exports;
-
-// TODO: Best practise?
-
 class Fixtures {
 
 	get foo() {
