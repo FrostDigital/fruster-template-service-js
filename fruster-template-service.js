@@ -7,6 +7,9 @@ const FooRepo = require("./lib/repos/FooRepo");
 const FooManager = require('./lib/managers/FooManager');
 const GetFooHandler = require("./lib/handlers/GetFooHandler");
 
+const FooWithBarSchema = require("./lib/schemas/FooWithBar");
+const GetFooRequestSchema = require("./lib/schemas/GetFooRequest");
+
 module.exports = {
 	start: async (busAddress, mongoUrl) => {
 		const db = await mongo.connect(mongoUrl);
@@ -31,8 +34,8 @@ function registerHandlers(db) {
 	// SERVICE
 	bus.subscribe({
 		subject: constants.endpoints.service.GET_FOO,
-		requestSchema: constants.schemas.request.GET_FOO,
-		responseSchema: constants.schemas.response.FOO_WITH_BAR,
+		requestSchema: GetFooRequestSchema,
+		responseSchema: FooWithBarSchema,
 		permissions: constants.permissions.GET_FOO,
 		docs: docs.service.GET_FOO,
 		handle: (req) => getFooHandler.handle(req)
