@@ -15,8 +15,6 @@ describe("FooRepo", () => {
 	/** @type {Db} */
 	let db;
 
-	afterEach(bus.clearClients);
-
 	frusterTestUtils
 		.startBeforeEach(specConstants
 			.testUtilsOptions(async (connection) => {
