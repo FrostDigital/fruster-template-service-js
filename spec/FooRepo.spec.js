@@ -5,7 +5,7 @@ const fixtures = require("./support/fixtures");
 const specConstants = require("./support/spec-constants");
 const errors = require("../lib/errors");
 const FooRepo = require("../lib/repos/FooRepo");
-const FooModel = require('../lib/models/FooModel');
+const FooModel = require("../lib/models/FooModel");
 
 describe("FooRepo", () => {
 

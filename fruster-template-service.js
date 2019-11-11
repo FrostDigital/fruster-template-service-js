@@ -4,7 +4,7 @@ const Db = mongo.Db;
 const constants = require("./lib/constants");
 const docs = require("./lib/docs");
 const FooRepo = require("./lib/repos/FooRepo");
-const FooManager = require('./lib/managers/FooManager');
+const FooManager = require("./lib/managers/FooManager");
 const GetFooHandler = require("./lib/handlers/GetFooHandler");
 
 const FooWithBarSchema = require("./lib/schemas/FooWithBar");
