@@ -1,45 +1,31 @@
-const Db = require("mongodb").Db;
-const bus = require("fruster-bus");
+const BarServiceClient = require("../lib/clients/BarServiceClient");
 const frusterTestUtils = require("fruster-test-utils");
-const fixtures = require("./support/fixtures");
 const specConstants = require("./support/spec-constants");
-const FooRepo = require("../lib/repos/FooRepo");
-const constants = require("../lib/constants");
-const errors = require("../lib/errors");
-const MockBarService = require('./support/MockBarService');
-const log = require("fruster-log");
-
 const FooModel = require('../lib/models/FooModel');
-
+const constants = require("../lib/constants");
+const fixtures = require("./support/fixtures");
+const errors = require("../lib/errors");
+const bus = require("fruster-bus").testBus;
+const Db = require("mongodb").Db;
 
 describe("GetFooHandler", () => {
-
-	/** @type {FooModel} */
-	let foo;
 
 	/** @type {Db} */
 	let db;
 
-	frusterTestUtils
-		.startBeforeEach(specConstants
-			.testUtilsOptions(async (connection) => {
-				MockBarService.init();
-				db = connection.db;
-				foo = await createFoo(db);
-			}));
+	frusterTestUtils.startBeforeEach(specConstants.testUtilsOptions(async (connection) => db = connection.db));
 
-	it("should return BAD_REQUEST if id is not a uuid", async done => {
+	it("should return BAD_REQUEST if id is not a uuid", async (done) => {
 		try {
 			await bus.request({
 				subject: constants.endpoints.service.GET_FOO,
-				skipOptionsRequest: true,
 				message: {
 					user: fixtures.user,
-					reqId: "reqId",
 					data: { id: "fake" }
 				}
 			});
 
+			done.fail();
 		} catch (err) {
 			expect(err.status).toBe(400);
 			expect(err.error.code).toBe(errors.badRequest().error.code);
@@ -52,13 +38,13 @@ describe("GetFooHandler", () => {
 		try {
 			await bus.request({
 				subject: constants.endpoints.service.GET_FOO,
-				skipOptionsRequest: true,
 				message: {
 					user: fixtures.user,
-					reqId: "reqId",
-					data: { id: "26911e7d-bb4c-4a11-a93d-34240993bba2" }  // <- does not exist
+					data: { id: fixtures.foo.id }  // <- does not exist
 				}
 			});
+
+			done.fail();
 		} catch (err) {
 			expect(err.status).toBe(404);
 			expect(err.error.code).toBe(errors.notFound().error.code);
@@ -69,18 +55,17 @@ describe("GetFooHandler", () => {
 
 	it("should return PERMISSION_DENIED if user has not permission to get foo", async done => {
 		try {
-			let user = fixtures.user;
-			user.scopes = [];
+			const user = { ...fixtures.user, scopes: ["some-scope-not-valid-for-endpoint"] };
 
 			await bus.request({
 				subject: constants.endpoints.service.GET_FOO,
-				skipOptionsRequest: true,
 				message: {
 					user: user,
-					reqId: "reqId",
-					data: { id: foo.id }
+					data: { id: fixtures.foo.id }
 				}
 			});
+
+			done.fail();
 		} catch (err) {
 			expect(err.status).toBe(403);
 			expect(err.error.code).toBe("PERMISSION_DENIED");
@@ -89,31 +74,32 @@ describe("GetFooHandler", () => {
 		}
 	});
 
-	it("should get Foo by its id", async done => {
-		try {
-			const resp = await bus.request({
-				subject: constants.endpoints.service.GET_FOO,
-				skipOptionsRequest: true,
-				message: {
-					user: fixtures.user,
-					reqId: "reqId",
-					data: { id: foo.id }
-				}
-			});
+	it("should get Foo by its id", async () => {
+		const foo = new FooModel({ ...fixtures.foo, barId: "ramjam" }, fixtures.user);
+		const bar = (id) => ({ id, bar: "bar" });
 
-			expect(resp.status).toBe(200);
-			done();
-		} catch (err) {
-			log.error(err);
-			done.fail(err);
-		}
+		await db.collection(constants.collections.FOOS).insertOne(foo);
+
+		const mockGetBarRequest = frusterTestUtils.mockService({
+			subject: BarServiceClient.endpoints.GET_BAR,
+			response: ({ data: { barId } }) => ({
+				status: 200,
+				data: bar(barId)
+			})
+		});
+
+		const resp = await bus.request({
+			subject: constants.endpoints.service.GET_FOO,
+			message: {
+				user: fixtures.user,
+				data: { id: foo.id }
+			}
+		});
+
+		expect(resp.status).toBe(200);
+
+		expect(mockGetBarRequest.invocations).toBe(1);
+		expect(mockGetBarRequest.requests[0].data.barId).toBe(foo.barId);
 	});
 
-	async function createFoo(db) {
-		const repo = new FooRepo(db);
-
-		return await repo.create(new FooModel({
-			name: "name"
-		}, fixtures.user));
-	}
 });

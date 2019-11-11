@@ -32,6 +32,8 @@ function registerHandlers(db) {
 	// Add HTTP handlers here
 
 	// SERVICE
+	// Add service handlers here
+
 	bus.subscribe({
 		subject: constants.endpoints.service.GET_FOO,
 		requestSchema: GetFooRequestSchema,
@@ -41,7 +43,6 @@ function registerHandlers(db) {
 		handle: (req) => getFooHandler.handle(req)
 	});
 
-	// Add service handlers here
 }
 
 /**
@@ -49,8 +50,5 @@ function registerHandlers(db) {
  */
 function createIndexes(db) {
 	// Create indexes as needed
-	db.collection(constants.collections.FOOS)
-		.createIndex({
-			id: 1
-		});
+	db.collection(constants.collections.FOOS).createIndex({ id: 1 });
 }
