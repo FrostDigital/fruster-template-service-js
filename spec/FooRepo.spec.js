@@ -5,7 +5,7 @@ const fixtures = require("./support/fixtures");
 const specConstants = require("./support/spec-constants");
 const errors = require("../lib/errors");
 const FooRepo = require("../lib/repos/FooRepo");
-const FooModel = require('../lib/models/FooModel');
+const FooModel = require("../lib/models/FooModel");
 
 describe("FooRepo", () => {
 
@@ -45,33 +45,6 @@ describe("FooRepo", () => {
 		expect(retrievedFoo._id).toBeUndefined("should not leak _id");
 
 		done();
-	});
-
-	it("should throw 500 error if unknown fail when getting Foo by id", async done => {
-		const detail = 1337;
-
-		try {
-			const foo = await createFoo(fixtures.foo, fixtures.user);
-
-			// @ts-ignore
-			const brokenRepo = new FooRepo({
-				collection: () => {
-					return {
-						findOne: () => {
-							throw detail;
-						}
-					};
-				}
-			});
-
-			await brokenRepo.getById(foo.id);
-
-			done.fail();
-		} catch (err) {
-			expect(err.status).toBe(500);
-			expect(err.error.code).toBe(errors.internalServerError().error.code);
-			done();
-		}
 	});
 
 	it("should get throw exception with 404 if Foo does not exist", async done => {

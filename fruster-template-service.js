@@ -4,7 +4,7 @@ const Db = mongo.Db;
 const constants = require("./lib/constants");
 const docs = require("./lib/docs");
 const FooRepo = require("./lib/repos/FooRepo");
-const FooManager = require('./lib/managers/FooManager');
+const FooManager = require("./lib/managers/FooManager");
 const GetFooHandler = require("./lib/handlers/GetFooHandler");
 
 const FooWithBarSchema = require("./lib/schemas/FooWithBar");
@@ -32,6 +32,8 @@ function registerHandlers(db) {
 	// Add HTTP handlers here
 
 	// SERVICE
+	// Add service handlers here
+
 	bus.subscribe({
 		subject: constants.endpoints.service.GET_FOO,
 		requestSchema: GetFooRequestSchema,
@@ -41,7 +43,6 @@ function registerHandlers(db) {
 		handle: (req) => getFooHandler.handle(req)
 	});
 
-	// Add service handlers here
 }
 
 /**
@@ -49,8 +50,5 @@ function registerHandlers(db) {
  */
 function createIndexes(db) {
 	// Create indexes as needed
-	db.collection(constants.collections.FOOS)
-		.createIndex({
-			id: 1
-		});
+	db.collection(constants.collections.FOOS).createIndex({ id: 1 });
 }
