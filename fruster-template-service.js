@@ -6,17 +6,21 @@ const docs = require("./lib/docs");
 const FooRepo = require("./lib/repos/FooRepo");
 const FooManager = require("./lib/managers/FooManager");
 const GetFooHandler = require("./lib/handlers/GetFooHandler");
+const CreateFooHandler = require("./lib/handlers/CreateFooHandler");
+const BarDeletedListener = require("./lib/listeners/BarDeletedListener");
 
 const FooWithBarSchema = require("./lib/schemas/FooWithBar");
 const GetFooRequestSchema = require("./lib/schemas/GetFooRequest");
+const CreateFooRequestSchema = require("./lib/schemas/CreateFooRequest");
+const DeleteFoosByBarIdRequest = require("./lib/schemas/DeleteFoosByBarIdRequest");
 
 module.exports = {
 	start: async (busAddress, mongoUrl) => {
 		const db = await mongo.connect(mongoUrl);
 
 		await bus.connect(busAddress);
-		await registerHandlers(db);
-		await createIndexes(db);
+		registerHandlers(db);
+		createIndexes(db);
 	}
 };
 
@@ -27,13 +31,22 @@ function registerHandlers(db) {
 	const fooRepo = new FooRepo(db);
 	const fooManager = new FooManager(fooRepo);
 	const getFooHandler = new GetFooHandler(fooManager);
+	const createFooHandler = new CreateFooHandler(fooRepo);
+	const barDeletedListener = new BarDeletedListener(fooRepo);
 
 	// HTTP
-	// Add HTTP handlers here
+	// Add http handlers here
+	bus.subscribe({
+		subject: constants.endpoints.http.CREATE_FOO,
+		requestSchema: CreateFooRequestSchema,
+		responseSchema: FooWithBarSchema,
+		permissions: constants.permissions.CREATE_FOO,
+		docs: docs.http.CREATE_FOO,
+		handle: (req) => createFooHandler.handleHttp(req)
+	});
 
 	// SERVICE
 	// Add service handlers here
-
 	bus.subscribe({
 		subject: constants.endpoints.service.GET_FOO,
 		requestSchema: GetFooRequestSchema,
@@ -43,6 +56,15 @@ function registerHandlers(db) {
 		handle: (req) => getFooHandler.handle(req)
 	});
 
+	// LISTENERS
+	// Add listeners here
+	bus.subscribe({
+		subject: constants.endpoints.listener.BAR_DELETED,
+		requestSchema: DeleteFoosByBarIdRequest,
+		docs: docs.listener.BAR_DELETED,
+		createQueueGroup: false,
+		handle: (req) => barDeletedListener.handle(req)
+	});
 }
 
 /**
