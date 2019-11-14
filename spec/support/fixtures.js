@@ -9,6 +9,16 @@ class Fixtures {
 
 	}
 
+	get createFooRequest(){
+
+		return {
+			name: "foo",
+			description: "foo description",
+			bar: "bar"
+		};
+
+	}
+
 	get user() {
 
 		return {
