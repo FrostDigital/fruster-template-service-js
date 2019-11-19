@@ -16,12 +16,12 @@
 	"devDependencies": {
 		"@types/mongodb": "2.2.19",
 		"fruster-test-utils": "^0.5.0",
-		"jasmine": "^3.1.0",
+		"jasmine": "^3.5.0",
 		"jasmine-spec-reporter": "^4.2.1",
-		"nyc": "^13.0.1"
+		"nyc": "^14.1.1"
 	},
 	"engines": {
-		"node": "8.1.2"
+		"node": "12.13.0"
 	},
 	"nyc": {
 		"exclude": [

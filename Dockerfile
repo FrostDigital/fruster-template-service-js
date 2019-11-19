@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:8
+FROM mhart/alpine-node:12
 
 RUN apk add --update bash && rm -rf /var/cache/apk/*
 

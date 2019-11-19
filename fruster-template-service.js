@@ -20,7 +20,9 @@ module.exports = {
 
 		await bus.connect(busAddress);
 		registerHandlers(db);
-		createIndexes(db);
+
+		if (!process.env.CI)
+			await createIndexes(db);
 	}
 };
 
@@ -70,7 +72,7 @@ function registerHandlers(db) {
 /**
  * @param {Db} db
  */
-function createIndexes(db) {
+async function createIndexes(db) {
 	// Create indexes as needed
-	db.collection(constants.collections.FOOS).createIndex({ id: 1 });
+	await db.collection(constants.collections.FOOS).createIndex({ id: 1 });
 }

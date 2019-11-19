@@ -1,5 +1,5 @@
 const Db = require("mongodb").Db;
-const bus = require("fruster-bus");
+const bus = require("fruster-bus").testBus;
 const frusterTestUtils = require("fruster-test-utils");
 const uuid = require("uuid");
 const fixtures = require("./support/fixtures");
@@ -36,9 +36,11 @@ describe("BarDeletedListener", () => {
 				}
 			});
 
-		} catch (err) {
-			expect(err.status).toBe(400);
-			expect(err.error.code).toBe(errors.badRequest().error.code);
+			done.fail();
+
+		} catch ({ status, error }) {
+			expect(status).toBe(400, "err.status");
+			expect(error.code).toBe(errors.badRequest().error.code, "err.code");
 
 			done();
 		}
@@ -47,10 +49,10 @@ describe("BarDeletedListener", () => {
 	it("should be possible to delete foos by bar id", async () => {
 		const barId = uuid.v4();
 
-		await createFoo({...fixtures.foo, barId});
-		await createFoo({...fixtures.foo, barId});
+		await createFoo({ ...fixtures.foo, barId });
+		await createFoo({ ...fixtures.foo, barId });
 
-		const resp = await bus.request({
+		const { status, data } = await bus.request({
 			subject: constants.endpoints.listener.BAR_DELETED,
 			skipOptionsRequest: true,
 			message: {
@@ -59,8 +61,8 @@ describe("BarDeletedListener", () => {
 			}
 		});
 
-		expect(resp.status).toBe(200);
-		expect(resp.data.deletedCount).toBe(2);
+		expect(status).toBe(200, "status");
+		expect(data.deletedCount).toBe(2, "deleted count");
 	});
 
 	async function createFoo(foo) {
