@@ -4,17 +4,17 @@ const service = require("../../fruster-template-service");
 
 module.exports = {
 
-    /**
-     * @param {Function=} afterStart
-     */
-    testUtilsOptions: (afterStart) => {
-        return {
-            mockNats: true,
-            bus,
-            service,
-            afterStart,
-            mongoUrl: `mongodb://localhost:27017/${constants.SERVICE_NAME}-test`
-        };
-    }
+	/**
+	 * @param {Function=} afterStart
+	 */
+	testUtilsOptions: (afterStart) => {
+		return {
+			mockNats: true,
+			bus,
+			service,
+			afterStart,
+			mongoUrl: `mongodb://localhost:27017/${constants.SERVICE_NAME}-test`
+		};
+	}
 
 };

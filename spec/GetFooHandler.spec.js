@@ -26,9 +26,9 @@ describe("GetFooHandler", () => {
 			});
 
 			done.fail();
-		} catch (err) {
-			expect(err.status).toBe(400);
-			expect(err.error.code).toBe(errors.badRequest().error.code);
+		} catch ({ status, error }) {
+			expect(status).toBe(400, "err.status");
+			expect(error.code).toBe(errors.badRequest().error.code, "err.code");
 
 			done();
 		}
@@ -45,9 +45,9 @@ describe("GetFooHandler", () => {
 			});
 
 			done.fail();
-		} catch (err) {
-			expect(err.status).toBe(404);
-			expect(err.error.code).toBe(errors.notFound().error.code);
+		} catch ({ status, error }) {
+			expect(status).toBe(404, "err.status");
+			expect(error.code).toBe(errors.notFound().error.code, "err.code");
 
 			done();
 		}
@@ -66,9 +66,9 @@ describe("GetFooHandler", () => {
 			});
 
 			done.fail();
-		} catch (err) {
-			expect(err.status).toBe(403);
-			expect(err.error.code).toBe("PERMISSION_DENIED");
+		} catch ({ status, error }) {
+			expect(status).toBe(403, "err.status");
+			expect(error.code).toBe("PERMISSION_DENIED", "err.code");
 
 			done();
 		}
@@ -88,7 +88,7 @@ describe("GetFooHandler", () => {
 			})
 		});
 
-		const resp = await bus.request({
+		const { status } = await bus.request({
 			subject: constants.endpoints.service.GET_FOO,
 			message: {
 				user: fixtures.user,
@@ -96,10 +96,10 @@ describe("GetFooHandler", () => {
 			}
 		});
 
-		expect(resp.status).toBe(200);
+		expect(status).toBe(200, "status");
 
-		expect(mockGetBarRequest.invocations).toBe(1);
-		expect(mockGetBarRequest.requests[0].data.barId).toBe(foo.barId);
+		expect(mockGetBarRequest.invocations).toBe(1, "mockGetBarRequest.invocations");
+		expect(mockGetBarRequest.requests[0].data.barId).toBe(foo.barId, "barId");
 	});
 
 });

@@ -1,4 +1,4 @@
-const bus = require("fruster-bus");
+const bus = require("fruster-bus").testBus;
 const frusterTestUtils = require("fruster-test-utils");
 const fixtures = require("./support/fixtures");
 const specConstants = require("./support/spec-constants");
@@ -22,9 +22,11 @@ describe("CreateFooHandler", () => {
 					data: fixtures.createFooRequest
 				}
 			});
-		} catch (err) {
-			expect(err.status).toBe(403);
-			expect(err.error.code).toBe("PERMISSION_DENIED");
+
+			done.fail();
+		} catch ({ status, error }) {
+			expect(status).toBe(403, "err.status");
+			expect(error.code).toBe("PERMISSION_DENIED", "err.code");
 
 			done();
 		}
@@ -33,7 +35,7 @@ describe("CreateFooHandler", () => {
 	it("should create Foo", async () => {
 		const user = { ...fixtures.user, scopes: ["foo.create"] };
 
-		const resp = await bus.request({
+		const { status } = await bus.request({
 			subject: constants.endpoints.http.CREATE_FOO,
 			skipOptionsRequest: true,
 			message: {
@@ -43,6 +45,6 @@ describe("CreateFooHandler", () => {
 			}
 		});
 
-		expect(resp.status).toBe(200);
+		expect(status).toBe(201, "status");
 	});
 });

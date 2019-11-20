@@ -1,5 +1,4 @@
 const Db = require("mongodb").Db;
-const bus = require("fruster-bus");
 const frusterTestUtils = require("fruster-test-utils");
 const fixtures = require("./support/fixtures");
 const specConstants = require("./support/spec-constants");
@@ -47,19 +46,10 @@ describe("FooRepo", () => {
 		done();
 	});
 
-	it("should get throw exception with 404 if Foo does not exist", async done => {
-		try {
-			const retrievedFoo = await repo.getById("fake-id");
+	it("should get throw exception with 404 if Foo does not exist", async () => {
+		const retrievedFoo = await repo.getById("fake-id");
 
-			expect(retrievedFoo).toBe(null);
-
-			done();
-		} catch (err) {
-			expect(err.status).toBe(404);
-			expect(err.error.code).toBe(errors.notFound().error.code);
-
-			done();
-		}
+		expect(retrievedFoo).toBe(null);
 	});
 
 	it("should update Foo details", async done => {
