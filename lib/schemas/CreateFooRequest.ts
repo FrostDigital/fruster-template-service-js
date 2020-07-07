@@ -1,6 +1,6 @@
-const Foo = require("./Foo");
+import Foo from "./Foo";
 
-module.exports = {
+export default {
 	id: "CreateFooRequest",
 	description: "Foo with bar",
 	properties: {

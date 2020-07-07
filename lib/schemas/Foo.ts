@@ -1,8 +1,8 @@
-const User = require("./User");
+import User from "./User";
 
 const nullableString = ["string", "null"];
 
-module.exports = {
+export default {
 	id: "Foo",
 	description: "Foo is an example object",
 	type: "object",
@@ -23,16 +23,16 @@ module.exports = {
 		created: {
 			type: nullableString,
 			format: "date-time",
-			description: "The organisation created time"
+			description: "The organization created time"
 		},
 		updated: {
 			type: nullableString,
 			format: "date-time",
-			description: "The organisation last updated time"
+			description: "The organization last updated time"
 		},
 		createdBy: {
 			...User.properties.id,
-			description: "The organisation created user"
+			description: "The organization created user"
 		}
 	}
 };

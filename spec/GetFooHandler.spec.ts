@@ -1,12 +1,12 @@
-const BarServiceClient = require("../lib/clients/BarServiceClient");
+import { v4 } from "uuid";
+import constants from "../lib/constants";
+import errors from "../lib/errors";
+import BarServiceClient from "../lib/clients/BarServiceClient";
+import specConstants from "./support/spec-constants";
+import fixtures from "./support/fixtures";
+
 const frusterTestUtils = require("fruster-test-utils");
-const specConstants = require("./support/spec-constants");
-const FooModel = require("../lib/models/FooModel");
-const constants = require("../lib/constants");
-const fixtures = require("./support/fixtures");
-const errors = require("../lib/errors");
 const bus = require("fruster-bus").testBus;
-const Db = require("mongodb").Db;
 
 describe("GetFooHandler", () => {
 
@@ -75,7 +75,14 @@ describe("GetFooHandler", () => {
 	});
 
 	it("should get Foo by its id", async () => {
-		const foo = new FooModel({ ...fixtures.foo, barId: "ramjam" }, fixtures.user);
+		const foo = {
+			...fixtures.foo,
+			id: v4(),
+			barId: "ramjam",
+			created: new Date(),
+			createdBy: fixtures.user.id,
+			description: "test"
+		};
 		const bar = (id) => ({ id, bar: "bar" });
 
 		await db.collection(constants.collections.FOOS).insertOne(foo);

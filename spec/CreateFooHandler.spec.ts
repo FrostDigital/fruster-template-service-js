@@ -1,13 +1,13 @@
+import fixtures from "./support/fixtures";
+import constants from "../lib/constants";
+import specConstants from "./support/spec-constants";
+
 const bus = require("fruster-bus").testBus;
 const frusterTestUtils = require("fruster-test-utils");
-const fixtures = require("./support/fixtures");
-const specConstants = require("./support/spec-constants");
-const constants = require("../lib/constants");
-
 
 describe("CreateFooHandler", () => {
 
-	frusterTestUtils.startBeforeEach(specConstants.testUtilsOptions());
+	frusterTestUtils.startBeforeEach(specConstants.testUtilsOptions(() => { }));
 
 	it("should return PERMISSION_DENIED if user has not permission to create foo", async done => {
 		try {
@@ -32,7 +32,7 @@ describe("CreateFooHandler", () => {
 		}
 	});
 
-	it("should create Foo", async () => {
+	it("should possible to create Foo", async () => {
 		const user = { ...fixtures.user, scopes: ["foo.create"] };
 
 		const { status } = await bus.request({

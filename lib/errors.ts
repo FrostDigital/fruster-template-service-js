@@ -9,4 +9,4 @@ const serviceSpecificErrors = [{
 	title: "This is an example error"
 }];
 
-module.exports = require("fruster-errors")(serviceSpecificErrors);
+export default require("fruster-errors")(serviceSpecificErrors);

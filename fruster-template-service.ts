@@ -1,22 +1,24 @@
 const bus = require("fruster-bus");
-const mongo = require("mongodb");
-const Db = mongo.Db;
-const constants = require("./lib/constants");
-const docs = require("./lib/docs");
-const FooRepo = require("./lib/repos/FooRepo");
-const FooManager = require("./lib/managers/FooManager");
-const GetFooHandler = require("./lib/handlers/GetFooHandler");
-const CreateFooHandler = require("./lib/handlers/CreateFooHandler");
-const BarDeletedListener = require("./lib/listeners/BarDeletedListener");
+import { connect, Db } from "mongodb";
 
-const FooWithBarSchema = require("./lib/schemas/FooWithBar");
-const GetFooRequestSchema = require("./lib/schemas/GetFooRequest");
-const CreateFooRequestSchema = require("./lib/schemas/CreateFooRequest");
-const DeleteFoosByBarIdRequest = require("./lib/schemas/DeleteFoosByBarIdRequest");
+import FooRepo from "./lib/repos/FooRepo";
+import FooManager from "./lib/managers/FooManager";
 
-module.exports = {
-	start: async (busAddress, mongoUrl) => {
-		const db = await mongo.connect(mongoUrl);
+import GetFooHandler from "./lib/handlers/GetFooHandler";
+import CreateFooHandler from "./lib/handlers/CreateFooHandler";
+import BarDeletedListener from "./lib/listeners/BarDeletedListener";
+
+import constants from "./lib/constants";
+import docs from "./lib/docs";
+
+import CreateFooRequest from "./lib/schemas/CreateFooRequest";
+import FooWithBar from "./lib/schemas/FooWithBar";
+import GetFooRequest from "./lib/schemas/GetFooRequest";
+import DeleteFoosByBarIdRequest from "./lib/schemas/DeleteFoosByBarIdRequest";
+
+export default {
+	start: async (busAddress: string, mongoUrl: string) => {
+		const db = await connect(mongoUrl);
 
 		await bus.connect(busAddress);
 		registerHandlers(db);
@@ -29,7 +31,7 @@ module.exports = {
 /**
  * @param {Db} db
  */
-function registerHandlers(db) {
+function registerHandlers(db: Db) {
 	const fooRepo = new FooRepo(db);
 	const fooManager = new FooManager(fooRepo);
 	const getFooHandler = new GetFooHandler(fooManager);
@@ -40,8 +42,8 @@ function registerHandlers(db) {
 	// Add http handlers here
 	bus.subscribe({
 		subject: constants.endpoints.http.CREATE_FOO,
-		requestSchema: CreateFooRequestSchema,
-		responseSchema: FooWithBarSchema,
+		requestSchema: CreateFooRequest,
+		responseSchema: FooWithBar,
 		permissions: constants.permissions.CREATE_FOO,
 		docs: docs.http.CREATE_FOO,
 		handle: (req) => createFooHandler.handleHttp(req)
@@ -51,8 +53,8 @@ function registerHandlers(db) {
 	// Add service handlers here
 	bus.subscribe({
 		subject: constants.endpoints.service.GET_FOO,
-		requestSchema: GetFooRequestSchema,
-		responseSchema: FooWithBarSchema,
+		requestSchema: GetFooRequest,
+		responseSchema: FooWithBar,
 		permissions: constants.permissions.GET_FOO,
 		docs: docs.service.GET_FOO,
 		handle: (req) => getFooHandler.handle(req)

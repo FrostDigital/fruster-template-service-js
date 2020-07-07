@@ -1,6 +1,6 @@
-const Foo = require("./Foo");
+import Foo from "./Foo";
 
-module.exports = {
+export default {
 	id: "GetFooRequest",
 	description: "Request to get a Foo by its id",
 	type: "object",

@@ -1,21 +1,25 @@
 const bus = require("fruster-bus");
 
+interface GetBarRequest {
+	reqId: string;
+	barId: string;
+}
+
+interface GetBarResponse {
+	id: string;
+	bar: string;
+}
+
 /**
- * Note: this service client was generated automatically by api doc @ 2019-11-11T12:04:16.681Z
+ * Note: this service client for js was generated automatically by api doc @ 2019-11-11T12:04:16.681Z
  */
 class BarServiceClient {
 
 	/**
 	 * All endpoints
 	 */
-	static get endpoints() {
-
-		return {
-
-			GET_BAR: "bar-service.get-bar"
-
-		};
-
+	static endpoints = {
+		GET_BAR: "bar-service.get-bar"
 	}
 
 	/**
@@ -35,7 +39,7 @@ class BarServiceClient {
 	 *
 	 * @return {Promise<GetBarResponse>}
 	 */
-	static async getBar({ reqId, barId }) {
+	static async getBar({ reqId, barId }: GetBarRequest): Promise<GetBarResponse> {
 		return (await bus.request({
 			subject: BarServiceClient.endpoints.GET_BAR,
 			message: {
@@ -49,4 +53,4 @@ class BarServiceClient {
 
 }
 
-module.exports = BarServiceClient;
+export default BarServiceClient;

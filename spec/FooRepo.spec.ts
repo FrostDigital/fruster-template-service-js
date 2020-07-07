@@ -1,10 +1,8 @@
-const Db = require("mongodb").Db;
+import FooRepo from "../lib/repos/FooRepo";
+import fixtures from "./support/fixtures";
+import specConstants from "./support/spec-constants";
+
 const frusterTestUtils = require("fruster-test-utils");
-const fixtures = require("./support/fixtures");
-const specConstants = require("./support/spec-constants");
-const errors = require("../lib/errors");
-const FooRepo = require("../lib/repos/FooRepo");
-const FooModel = require("../lib/models/FooModel");
 
 describe("FooRepo", () => {
 
@@ -24,9 +22,8 @@ describe("FooRepo", () => {
 	it("should create Foo", async done => {
 		const createdFoo = await createFoo(fixtures.foo, fixtures.user);
 
-		expect(createdFoo).toEqual(jasmine.any(FooModel));
 		expect(createdFoo.id).toBeDefined("should have created id");
-		// @ts-ignore
+		//@ts-ignore
 		expect(createdFoo._id).toBeUndefined("should not leak _id");
 		expect(createdFoo.name).toBe(fixtures.foo.name);
 
@@ -38,9 +35,7 @@ describe("FooRepo", () => {
 
 		const retrievedFoo = await repo.getById(foo.id);
 
-		expect(retrievedFoo).toEqual(jasmine.any(FooModel));
 		expect(retrievedFoo).toBeDefined("should have gotten foo by id");
-		// @ts-ignore
 		expect(retrievedFoo._id).toBeUndefined("should not leak _id");
 
 		done();
@@ -59,7 +54,6 @@ describe("FooRepo", () => {
 			description: "test description"
 		});
 
-		expect(updatedFoo).toEqual(jasmine.any(FooModel));
 		expect(updatedFoo.description).toBe("test description");
 
 		done();
@@ -81,7 +75,7 @@ describe("FooRepo", () => {
 
 	async function createFoo(foo, user) {
 		const repo = new FooRepo(db);
-		return await repo.create(new FooModel(foo, user));
+		return await repo.create(foo, user.id);
 	}
 
 });

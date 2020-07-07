@@ -1,4 +1,4 @@
-const constants = require("./lib/constants");
+import constants from "./lib/constants";
 
 /*
 	This is where all configuration for service is set.
@@ -11,7 +11,7 @@ const constants = require("./lib/constants");
 	Make sure to add comments to explain what the configuration is about.
 */
 
-module.exports = {
+export default {
 	// NATS servers, set multiple if using cluster.
 	// Example: `"nats://10.23.45.1:4222,nats://10.23.41.8:4222"`
 	bus: process.env.BUS || "nats://localhost:4222",

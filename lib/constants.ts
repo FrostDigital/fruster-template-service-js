@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 
 	// Name of this service, used in various places
 	SERVICE_NAME: "fruster-template-service",

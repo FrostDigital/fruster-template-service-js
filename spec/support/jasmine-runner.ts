@@ -4,11 +4,12 @@ const noop = function () { };
 
 /*
 	Bootstraps Jasmine and use the jasmine-spec-reporter which
-	makes test ouput look prettier compared to default reporter.
+	makes test output look prettier compared to default reporter.
 */
-
-let jrunner = new Jasmine({});
-jrunner.configureDefaultReporter({ print: noop });
+let jRunner = new Jasmine({});
+jRunner.configureDefaultReporter({ print: noop });
 jasmine.getEnv().addReporter(new SpecReporter());
-jrunner.loadConfigFile();
-jrunner.execute();
+jRunner.loadConfigFile("./spec/support/jasmine.json");
+jRunner.execute();
+
+export default () => { };

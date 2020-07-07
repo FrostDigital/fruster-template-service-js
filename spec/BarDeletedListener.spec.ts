@@ -1,13 +1,12 @@
-const Db = require("mongodb").Db;
+import { v4 } from "uuid";
+import FooRepo from "../lib/repos/FooRepo";
+import constants from "../lib/constants";
+import errors from "../lib/errors";
+import fixtures from "./support/fixtures";
+import specConstants from "./support/spec-constants";
+
 const bus = require("fruster-bus").testBus;
 const frusterTestUtils = require("fruster-test-utils");
-const uuid = require("uuid");
-const fixtures = require("./support/fixtures");
-const specConstants = require("./support/spec-constants");
-const FooRepo = require("../lib/repos/FooRepo");
-const constants = require("../lib/constants");
-const errors = require("../lib/errors");
-const FooModel = require('../lib/models/FooModel');
 
 describe("BarDeletedListener", () => {
 
@@ -47,7 +46,7 @@ describe("BarDeletedListener", () => {
 	});
 
 	it("should be possible to delete foos by bar id", async () => {
-		const barId = uuid.v4();
+		const barId = v4();
 
 		await createFoo({ ...fixtures.foo, barId });
 		await createFoo({ ...fixtures.foo, barId });
@@ -66,6 +65,6 @@ describe("BarDeletedListener", () => {
 	});
 
 	async function createFoo(foo) {
-		return await repo.create(new FooModel(foo, fixtures.user));
+		return await repo.create({ ...foo, createdBy: fixtures.user.id });
 	}
 });

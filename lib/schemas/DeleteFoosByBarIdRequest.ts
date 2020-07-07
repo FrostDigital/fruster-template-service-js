@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	id: "DeleteFoosByBarIdRequest",
 	type: "object",
 	description: "Request for delete foos by bar id",

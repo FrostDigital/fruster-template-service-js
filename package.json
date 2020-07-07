@@ -3,33 +3,36 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"start": "node ./app.js",
-		"test": "nyc --reporter=html --check-coverage --lines 90 node ./spec/support/jasmine-runner.js"
+		"start": "ts-node ./app.ts",
+		"start:watch": "ts-node-dev ./app.ts",
+		"test": "nyc --reporter=html --check-coverage --lines 90 ts-node ./spec/support/jasmine-runner.ts",
+		"test:watch": "ts-node-dev --respawn --no-notify ./spec/support/jasmine-runner.ts"
 	},
 	"dependencies": {
-		"fruster-bus": "^0.5.9",
+		"fruster-bus": "^0.7.5",
 		"fruster-errors": "0.1.2",
-		"fruster-health": "^0.0.13",
+		"fruster-health": "^0.0.14",
 		"fruster-log": "^0.0.18",
 		"mongodb": "^2.2.36"
 	},
 	"devDependencies": {
-		"@types/mongodb": "2.2.19",
+		"@types/jasmine": "^3.5.11",
+		"@types/node": "^14.0.14",
 		"fruster-test-utils": "^0.5.0",
 		"jasmine": "^3.5.0",
-		"jasmine-spec-reporter": "^4.2.1",
-		"nyc": "^14.1.1"
-	},
-	"engines": {
-		"node": "12.13.0"
+		"jasmine-spec-reporter": "^5.0.2",
+		"nyc": "^15.1.0",
+		"ts-node": "^8.10.2",
+		"ts-node-dev": "^1.0.0-pre.50",
+		"typescript": "^3.9.6"
 	},
 	"nyc": {
 		"exclude": [
 			"spec/*",
-			"lib/errors.js",
-			"lib/constants.js",
-			"lib/docs.js",
-			"config.js"
+			"lib/errors.ts",
+			"lib/constants.ts",
+			"lib/docs.ts",
+			"config.ts"
 		]
 	}
 }

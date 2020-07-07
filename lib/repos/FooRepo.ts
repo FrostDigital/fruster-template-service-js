@@ -1,6 +1,7 @@
-const FooModel = require("../models/FooModel");
-const constants = require("../constants");
-const Db = require("mongodb").Db;
+import { v4 as uuidV4 } from "uuid";
+import { Db } from "mongodb";
+import constants from "../constants";
+import FooModel from "../models/FooModel";
 
 /**
  * A repository meant to handle any operations to the database, in this case mongo db.
@@ -12,11 +13,9 @@ const Db = require("mongodb").Db;
  * `delete foo_id` in create.
  */
 class FooRepo {
+	private _collection;
 
-	/**
-	 * @param {Db} db
-	 */
-	constructor(db) {
+	constructor(db: Db) {
 		this._collection = db.collection(constants.collections.FOOS);
 	}
 
@@ -27,10 +26,8 @@ class FooRepo {
 	 *
 	 * @return {Promise<FooModel>} Foo
 	 */
-	async getById(id) {
-		const foo = await this._collection.findOne({ id });
-
-		return foo ? new FooModel(foo) : null;
+	async getById(id: string): Promise<FooModel> {
+		return await this._collection.findOne({ id }, { _id: 0 });
 	}
 
 	/**
@@ -49,10 +46,17 @@ class FooRepo {
 	 *
 	 * @return {Promise<FooModel>} created foo
 	 */
-	async create(foo) {
-		const result = await this._collection.insertOne(foo);
+	async create(foo: FooModel, createdBy: string): Promise<FooModel> {
+		const { ops } = await this._collection.insertOne({
+			...foo,
+			id: uuidV4(),
+			created: new Date(),
+			createdBy
+		});
 
-		return new FooModel(result.ops[0]);
+		delete ops[0]._id;
+
+		return ops[0];
 	}
 
 	/**
@@ -63,7 +67,7 @@ class FooRepo {
 	 *
 	 * @return {Promise<FooModel>} updated foo
 	 */
-	async update(id, changes) {
+	async update(id: string, changes: object): Promise<FooModel> {
 		await this._collection.updateOne({ id }, { $set: changes });
 
 		return await this.getById(id);
@@ -76,9 +80,9 @@ class FooRepo {
 	 *
 	 * @return {Promise<Number>} count of the deleted events
 	 */
-	async deleteByQuery(query) {
+	async deleteByQuery(query: object): Promise<number> {
 		return (await this._collection.deleteMany(query)).deletedCount;
 	}
 }
 
-module.exports = FooRepo;
+export default FooRepo;

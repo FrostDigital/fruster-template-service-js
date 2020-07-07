@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 
 	/**
 	 * This is the place to write documentation for endpoints.

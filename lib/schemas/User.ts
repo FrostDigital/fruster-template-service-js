@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	id: "User",
 	description: "User object",
 	type: "object",

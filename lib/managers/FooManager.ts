@@ -1,19 +1,20 @@
-const BarServiceClient = require("../clients/BarServiceClient");
-const FooRepo = require("../repos/FooRepo");
-const FooModel = require("../models/FooModel");
-const errors = require("../errors");
+import BarServiceClient from "../clients/BarServiceClient";
+import FooRepo from "../repos/FooRepo";
+import FooModel from "../models/FooModel";
+import errors from "../errors";
 
 /**
  * A manager meant to abstract reusable business logic
  * into a nice, friendly API.
  */
 class FooManager {
+	private fooRepo: FooRepo;
 
 	/**
 	 * @param {FooRepo} fooRepo
 	 */
-	constructor(fooRepo) {
-		this._fooRepo = fooRepo;
+	constructor(fooRepo: FooRepo) {
+		this.fooRepo = fooRepo;
 	}
 
 	/**
@@ -24,17 +25,17 @@ class FooManager {
 	 *
 	 * @return {Promise<FooModel>}
 	 */
-	async getFooWithBarById(reqId, id) {
-		const foo = await this._fooRepo.getById(id);
+	async getFooWithBarById(reqId: string, id: string): Promise<FooModel> {
+		const foo = await this.fooRepo.getById(id);
 
 		if (!foo)
 			throw errors.notFound(`Foo is not found for id ${id}`);
 
 		foo.bar = await BarServiceClient.getBar({ reqId, barId: foo.barId });
 
-		return new FooModel(foo);
+		return foo;
 	}
 
 }
 
-module.exports = FooManager;
+export default FooManager;

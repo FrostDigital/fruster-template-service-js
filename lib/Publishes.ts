@@ -2,12 +2,8 @@ const bus = require("fruster-bus");
 
 class Publishes {
 
-	static get subjects() {
-
-		return {
-			FOO_CREATED: "pub.foo-service.foo-created"
-		};
-
+	static subjects = {
+		FOO_CREATED: "pub.foo-service.foo-created"
 	}
 
 	/**
@@ -16,10 +12,10 @@ class Publishes {
 	 * @param {String} reqId
 	 * @param {String} fooId
 	 */
-	static fooCreated(reqId, fooId) {
+	static fooCreated(reqId: string, fooId: string) {
 		bus.publish(Publishes.subjects.FOO_CREATED, { reqId, data: { fooId } });
 	}
 
 }
 
-module.exports = Publishes;
+export default Publishes;

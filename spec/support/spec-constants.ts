@@ -1,13 +1,14 @@
-const bus = require("fruster-bus");
-const constants = require("../../lib/constants");
-const service = require("../../fruster-template-service");
+import constants from "../../lib/constants";
+import service from "../../fruster-template-service";
 
-module.exports = {
+const bus = require("fruster-bus");
+
+export default {
 
 	/**
 	 * @param {Function=} afterStart
 	 */
-	testUtilsOptions: (afterStart) => {
+	testUtilsOptions: (afterStart: Function) => {
 		return {
 			mockNats: true,
 			bus,
