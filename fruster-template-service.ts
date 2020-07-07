@@ -16,16 +16,14 @@ import FooWithBar from "./lib/schemas/FooWithBar";
 import GetFooRequest from "./lib/schemas/GetFooRequest";
 import DeleteFoosByBarIdRequest from "./lib/schemas/DeleteFoosByBarIdRequest";
 
-export default {
-	start: async (busAddress: string, mongoUrl: string) => {
-		const db = await connect(mongoUrl);
+export const start = async (busAddress: string, mongoUrl: string) => {
+	const db = await connect(mongoUrl);
 
-		await bus.connect(busAddress);
-		registerHandlers(db);
+	await bus.connect(busAddress);
+	registerHandlers(db);
 
-		if (!process.env.CI)
-			await createIndexes(db);
-	}
+	if (!process.env.CI)
+		await createIndexes(db);
 };
 
 /**
