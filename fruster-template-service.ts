@@ -1,16 +1,12 @@
 const bus = require("fruster-bus");
 import { connect, Db } from "mongodb";
-
+import constants from "./lib/constants";
+import docs from "./lib/docs";
 import FooRepo from "./lib/repos/FooRepo";
 import FooManager from "./lib/managers/FooManager";
-
 import GetFooHandler from "./lib/handlers/GetFooHandler";
 import CreateFooHandler from "./lib/handlers/CreateFooHandler";
 import BarDeletedListener from "./lib/listeners/BarDeletedListener";
-
-import constants from "./lib/constants";
-import docs from "./lib/docs";
-
 import CreateFooRequest from "./lib/schemas/CreateFooRequest";
 import FooWithBar from "./lib/schemas/FooWithBar";
 import GetFooRequest from "./lib/schemas/GetFooRequest";
@@ -26,9 +22,6 @@ export const start = async (busAddress: string, mongoUrl: string) => {
 		await createIndexes(db);
 };
 
-/**
- * @param {Db} db
- */
 function registerHandlers(db: Db) {
 	const fooRepo = new FooRepo(db);
 	const fooManager = new FooManager(fooRepo);
@@ -44,7 +37,7 @@ function registerHandlers(db: Db) {
 		responseSchema: FooWithBar,
 		permissions: constants.permissions.CREATE_FOO,
 		docs: docs.http.CREATE_FOO,
-		handle: (req) => createFooHandler.handleHttp(req)
+		handle: (req: any) => createFooHandler.handleHttp(req)
 	});
 
 	// SERVICE
@@ -55,7 +48,7 @@ function registerHandlers(db: Db) {
 		responseSchema: FooWithBar,
 		permissions: constants.permissions.GET_FOO,
 		docs: docs.service.GET_FOO,
-		handle: (req) => getFooHandler.handle(req)
+		handle: (req: any) => getFooHandler.handle(req)
 	});
 
 	// LISTENERS
@@ -65,14 +58,11 @@ function registerHandlers(db: Db) {
 		requestSchema: DeleteFoosByBarIdRequest,
 		docs: docs.listener.BAR_DELETED,
 		createQueueGroup: false,
-		handle: (req) => barDeletedListener.handle(req)
+		handle: (req: any) => barDeletedListener.handle(req)
 	});
 }
 
-/**
- * @param {Db} db
- */
-async function createIndexes(db) {
+async function createIndexes(db: Db) {
 	// Create indexes as needed
 	await db.collection(constants.collections.FOOS).createIndex({ id: 1 });
 }

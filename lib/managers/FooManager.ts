@@ -8,14 +8,8 @@ import errors from "../errors";
  * into a nice, friendly API.
  */
 class FooManager {
-	private fooRepo: FooRepo;
 
-	/**
-	 * @param {FooRepo} fooRepo
-	 */
-	constructor(fooRepo: FooRepo) {
-		this.fooRepo = fooRepo;
-	}
+	constructor(private fooRepo: FooRepo) { }
 
 	/**
 	 * Gets foo with bar from another service.
@@ -31,7 +25,8 @@ class FooManager {
 		if (!foo)
 			throw errors.notFound(`Foo is not found for id ${id}`);
 
-		foo.bar = await BarServiceClient.getBar({ reqId, barId: foo.barId });
+		if (foo.barId)
+			foo.bar = await BarServiceClient.getBar({ reqId, barId: foo.barId });
 
 		return foo;
 	}

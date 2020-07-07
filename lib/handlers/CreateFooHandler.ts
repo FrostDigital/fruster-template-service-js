@@ -8,19 +8,11 @@ const log = require("fruster-log");
  * Handler to create foo.
  */
 class CreateFooHandler {
-	private fooRepo: FooRepo;
 
-	/**
-	 * @param {FooRepo} fooRepo
-	 */
-	constructor(fooRepo: FooRepo) {
-		this.fooRepo = fooRepo;
-	}
+	constructor(private fooRepo: FooRepo) { }
 
 	/**
 	 * Handle http request.
-	 *
-	 * @param {FrusterRequest} req
 	 */
 	async handleHttp({ reqId, data, user }: FrusterRequest<FooModel>): Promise<FrusterResponse<FooModel>> {
 		const foo = await this.fooRepo.create(data, user.id);

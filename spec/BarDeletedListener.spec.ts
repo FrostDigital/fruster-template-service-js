@@ -1,24 +1,24 @@
 import { v4 } from "uuid";
+import { Db } from "mongodb";
 import FooRepo from "../lib/repos/FooRepo";
 import constants from "../lib/constants";
 import errors from "../lib/errors";
 import fixtures from "./support/fixtures";
 import specConstants from "./support/spec-constants";
+import FooModel from "../lib/models/FooModel";
 
 const bus = require("fruster-bus").testBus;
 const frusterTestUtils = require("fruster-test-utils");
 
 describe("BarDeletedListener", () => {
 
-	/** @type {FooRepo} */
-	let repo;
+	let repo: FooRepo;
 
-	/** @type {Db} */
-	let db;
+	let db: Db;
 
 	frusterTestUtils
 		.startBeforeEach(specConstants
-			.testUtilsOptions(async (connection) => {
+			.testUtilsOptions(async (connection: any) => {
 				db = connection.db;
 				repo = new FooRepo(db);
 			}));
@@ -64,7 +64,7 @@ describe("BarDeletedListener", () => {
 		expect(data.deletedCount).toBe(2, "deleted count");
 	});
 
-	async function createFoo(foo) {
-		return await repo.create({ ...foo, createdBy: fixtures.user.id });
+	async function createFoo(foo: FooModel): Promise<FooModel> {
+		return await repo.create(foo, fixtures.user.id);
 	}
 });

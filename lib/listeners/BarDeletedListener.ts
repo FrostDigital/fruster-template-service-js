@@ -14,14 +14,8 @@ interface BarDeletedResponse {
  * Listener for bar deleted
  */
 class BarDeletedListener {
-	private fooRepo: FooRepo;
 
-	/**
-	 * @param {FooRepo} fooRepo
-	 */
-	constructor(fooRepo: FooRepo) {
-		this.fooRepo = fooRepo;
-	}
+	constructor(private fooRepo: FooRepo) { }
 
 	/**
 	 * Handle listener

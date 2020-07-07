@@ -1,4 +1,5 @@
 import { v4 } from "uuid";
+import { Db } from "mongodb";
 import constants from "../lib/constants";
 import errors from "../lib/errors";
 import BarServiceClient from "../lib/clients/BarServiceClient";
@@ -10,10 +11,11 @@ const bus = require("fruster-bus").testBus;
 
 describe("GetFooHandler", () => {
 
-	/** @type {Db} */
-	let db;
+	let db: Db;
 
-	frusterTestUtils.startBeforeEach(specConstants.testUtilsOptions(async (connection) => db = connection.db));
+	frusterTestUtils.startBeforeEach(specConstants.testUtilsOptions(
+		async (connection: any) => db = connection.db)
+	);
 
 	it("should return BAD_REQUEST if id is not a uuid", async (done) => {
 		try {
@@ -83,13 +85,13 @@ describe("GetFooHandler", () => {
 			createdBy: fixtures.user.id,
 			description: "test"
 		};
-		const bar = (id) => ({ id, bar: "bar" });
+		const bar = (id: string) => ({ id, bar: "bar" });
 
 		await db.collection(constants.collections.FOOS).insertOne(foo);
 
 		const mockGetBarRequest = frusterTestUtils.mockService({
 			subject: BarServiceClient.endpoints.GET_BAR,
-			response: ({ data: { barId } }) => ({
+			response: ({ data: { barId } }: any) => ({
 				status: 200,
 				data: bar(barId)
 			})

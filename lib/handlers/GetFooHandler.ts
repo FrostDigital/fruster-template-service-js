@@ -10,19 +10,11 @@ interface GetFooRequest {
  * Handler to get foo by its id.
  */
 class GetFooHandler {
-	private fooManager: FooManager;
 
-	/**
-	 * @param {FooManager} fooManager
-	 */
-	constructor(fooManager: FooManager) {
-		this.fooManager = fooManager;
-	}
+	constructor(private fooManager: FooManager) { }
 
 	/**
 	 * Handle service request.
-	 *
-	 * @param {FrusterRequest} req
 	 */
 	async handle({ reqId, data: { id } }: FrusterRequest<GetFooRequest>): Promise<FrusterResponse<FooModel>> {
 		const foo = await this.fooManager.getFooWithBarById(reqId, id);

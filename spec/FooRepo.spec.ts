@@ -1,4 +1,6 @@
+import { Db } from "mongodb";
 import FooRepo from "../lib/repos/FooRepo";
+import FooModel from "../lib/models/FooModel";
 import fixtures from "./support/fixtures";
 import specConstants from "./support/spec-constants";
 
@@ -6,15 +8,13 @@ const frusterTestUtils = require("fruster-test-utils");
 
 describe("FooRepo", () => {
 
-	/** @type {FooRepo} */
-	let repo;
+	let repo: FooRepo;
 
-	/** @type {Db} */
-	let db;
+	let db: Db;
 
 	frusterTestUtils
 		.startBeforeEach(specConstants
-			.testUtilsOptions(async (connection) => {
+			.testUtilsOptions(async (connection: any) => {
 				db = connection.db;
 				repo = new FooRepo(connection.db);
 			}));
@@ -36,7 +36,6 @@ describe("FooRepo", () => {
 		const retrievedFoo = await repo.getById(foo.id);
 
 		expect(retrievedFoo).toBeDefined("should have gotten foo by id");
-		expect(retrievedFoo._id).toBeUndefined("should not leak _id");
 
 		done();
 	});
@@ -54,7 +53,7 @@ describe("FooRepo", () => {
 			description: "test description"
 		});
 
-		expect(updatedFoo.description).toBe("test description");
+		expect(updatedFoo?.description).toBe("test description");
 
 		done();
 	});
@@ -73,8 +72,7 @@ describe("FooRepo", () => {
 		done();
 	});
 
-	async function createFoo(foo, user) {
-		const repo = new FooRepo(db);
+	async function createFoo(foo: FooModel, user: any) {
 		return await repo.create(foo, user.id);
 	}
 

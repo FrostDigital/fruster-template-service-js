@@ -8,9 +8,6 @@ class Publishes {
 
 	/**
 	 * Publish foo created event
-	 *
-	 * @param {String} reqId
-	 * @param {String} fooId
 	 */
 	static fooCreated(reqId: string, fooId: string) {
 		bus.publish(Publishes.subjects.FOO_CREATED, { reqId, data: { fooId } });
