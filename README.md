@@ -1,21 +1,21 @@
 # Fruster Template Service
 
-This is a template service that shows how to build a Fruster micro service in node.js 
-following best practise and use latest and greatest toolings and libraries.
+This is a template service that shows how to build a Fruster micro service in node.ts
+following best practice and use latest and greatest toolings and libraries.
 
 This service will handle **Foo's** and consume another fictional service to get **Bar's**.
 
 ## Directory structure and files
 
 ```
-/app.js                         # Main entry point, running "node app.js" will start the service
-/fruster-template-service.js    # Connects to bus and mongo and wires up all handlers and repos
-/config.js                      # Configuration for the service
+/app.ts                         # Main entry point, running "node app.ts" will start the service
+/fruster-template-service.ts    # Connects to bus and mongo and wires up all handlers and repos
+/config.ts                      # Configuration for the service
 /lib/handlers/                  # Place handlers here
 /lib/models/                    # Place models here
 /lib/repos/                  	# Place repositories here
 /lib/clients/                  	# Place clients here
-/lib/errors.js                  # Errors that the service may throw
+/lib/errors.ts                  # Errors that the service may throw
 /spec/                          # Where to keep your specs (a.k.a tests)
 /spec/support/                  # Support files for specs, for example fixtures
 ```
@@ -32,9 +32,9 @@ Whatever returned from these methods, either directly or using a promise, will b
 
 ### Models
 
-Models use for filter fields in request and response. It will help to prepare the insert and update query bodies and result of retrieving queries.  
+Models use for filter fields in request and response. It will help to prepare the insert and update query bodies and result of retrieving queries.
 
-### Repo 
+### Repo
 
 Repo is short for _repository_ which is a class that encapsulates database queries and exposes a API for other
 classes to use (commonly a handler).
@@ -44,7 +44,7 @@ classes to use (commonly a handler).
 A client is used to interact with other peer services. The client encapsulates code for sending
 requests and parsing response and exposes a nice, readable API.
 
-Create one client per service, or use composition (client A has client B as instance variable) if necessary to 
+Create one client per service, or use composition (client A has client B as instance variable) if necessary to
 interact with multiple services.
 
 ## Code style
@@ -53,5 +53,5 @@ interact with multiple services.
 * Use tabs instead of spaces for indentation.
 * Comment using `jsdoc` standard.
 * Use `fruster-log` for logging - do not use `console.log`.
-* Name files that exports a class with capital camel case, such as `FooHandler.js`.
-* Name other files that does not export a class with kebab case, such as `fruster-template-service.js`.
+* Name files that exports a class with capital camel case, such as `FooHandler.ts`.
+* Name other files that does not export a class with kebab case, such as `fruster-template-service.ts`.
