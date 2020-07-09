@@ -1,5 +1,6 @@
 import { v4 } from "uuid";
 import { Db } from "mongodb";
+import { testBus } from "fruster-bus";
 import constants from "../lib/constants";
 import errors from "../lib/errors";
 import BarServiceClient from "../lib/clients/BarServiceClient";
@@ -7,7 +8,6 @@ import specConstants from "./support/spec-constants";
 import fixtures from "./support/fixtures";
 
 const frusterTestUtils = require("fruster-test-utils");
-const bus = require("fruster-bus").testBus;
 
 describe("GetFooHandler", () => {
 
@@ -19,7 +19,7 @@ describe("GetFooHandler", () => {
 
 	it("should return BAD_REQUEST if id is not a uuid", async (done) => {
 		try {
-			await bus.request({
+			await testBus.request({
 				subject: constants.endpoints.service.GET_FOO,
 				message: {
 					user: fixtures.user,
@@ -38,7 +38,7 @@ describe("GetFooHandler", () => {
 
 	it("should return NOT_FOUND if Foo does not exist", async done => {
 		try {
-			await bus.request({
+			await testBus.request({
 				subject: constants.endpoints.service.GET_FOO,
 				message: {
 					user: fixtures.user,
@@ -59,7 +59,7 @@ describe("GetFooHandler", () => {
 		try {
 			const user = { ...fixtures.user, scopes: ["some-scope-not-valid-for-endpoint"] };
 
-			await bus.request({
+			await testBus.request({
 				subject: constants.endpoints.service.GET_FOO,
 				message: {
 					user: user,
@@ -97,7 +97,7 @@ describe("GetFooHandler", () => {
 			})
 		});
 
-		const { status } = await bus.request({
+		const { status } = await testBus.request({
 			subject: constants.endpoints.service.GET_FOO,
 			message: {
 				user: fixtures.user,

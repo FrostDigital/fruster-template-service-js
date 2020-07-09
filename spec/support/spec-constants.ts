@@ -1,4 +1,4 @@
-const bus = require("fruster-bus");
+import bus from "fruster-bus";
 import constants from "../../lib/constants";
 import { start } from "../../fruster-template-service";
 

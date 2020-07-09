@@ -1,8 +1,8 @@
+import { testBus } from "fruster-bus";
 import fixtures from "./support/fixtures";
 import constants from "../lib/constants";
 import specConstants from "./support/spec-constants";
 
-const bus = require("fruster-bus").testBus;
 const frusterTestUtils = require("fruster-test-utils");
 
 describe("CreateFooHandler", () => {
@@ -13,7 +13,7 @@ describe("CreateFooHandler", () => {
 		try {
 			const user = { ...fixtures.user, scopes: ["some-scope-not-valid-for-endpoint"] };
 
-			await bus.request({
+			await testBus.request({
 				subject: constants.endpoints.http.CREATE_FOO,
 				skipOptionsRequest: true,
 				message: {
@@ -35,7 +35,7 @@ describe("CreateFooHandler", () => {
 	it("should possible to create Foo", async () => {
 		const user = { ...fixtures.user, scopes: ["foo.create"] };
 
-		const { status } = await bus.request({
+		const { status } = await testBus.request({
 			subject: constants.endpoints.http.CREATE_FOO,
 			skipOptionsRequest: true,
 			message: {

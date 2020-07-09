@@ -7,7 +7,8 @@ import fixtures from "./support/fixtures";
 import specConstants from "./support/spec-constants";
 import FooModel from "../lib/models/FooModel";
 
-const bus = require("fruster-bus").testBus;
+import { testBus } from "fruster-bus";
+
 const frusterTestUtils = require("fruster-test-utils");
 
 describe("BarDeletedListener", () => {
@@ -25,7 +26,7 @@ describe("BarDeletedListener", () => {
 
 	it("should return BAD_REQUEST if received invalid data", async done => {
 		try {
-			await bus.request({
+			await testBus.request({
 				subject: constants.endpoints.listener.BAR_DELETED,
 				skipOptionsRequest: true,
 				message: {
@@ -51,7 +52,7 @@ describe("BarDeletedListener", () => {
 		await createFoo({ ...fixtures.foo, barId });
 		await createFoo({ ...fixtures.foo, barId });
 
-		const { status, data } = await bus.request({
+		const { status, data } = await testBus.request({
 			subject: constants.endpoints.listener.BAR_DELETED,
 			skipOptionsRequest: true,
 			message: {

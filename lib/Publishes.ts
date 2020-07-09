@@ -1,4 +1,4 @@
-const bus = require("fruster-bus");
+import bus from "fruster-bus";
 
 class Publishes {
 

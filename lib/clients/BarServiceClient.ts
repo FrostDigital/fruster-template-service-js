@@ -44,9 +44,7 @@ class BarServiceClient {
 			subject: BarServiceClient.endpoints.GET_BAR,
 			message: {
 				reqId,
-				data: {
-					barId
-				}
+				data: { barId }
 			}
 		})).data;
 	}
