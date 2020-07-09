@@ -2,18 +2,38 @@ import { FrusterRequest, FrusterResponse } from "fruster-bus";
 import FooRepo from "../repos/FooRepo";
 import FooModel from "../models/FooModel";
 import Publishes from "../Publishes";
+import { subscribe, injectable, inject } from "fruster-decorators";
+import FooWithBar from "../schemas/FooWithBar";
+import CreateFooRequest from "../schemas/CreateFooRequest";
+
 const log = require("fruster-log");
+
+export const HTTP_SUBJECT = "http.post.foo";
 
 /**
  * Handler to create foo.
  */
+@injectable()
 class CreateFooHandler {
 
-	constructor(private fooRepo: FooRepo) { }
+	@inject()
+	private fooRepo!: FooRepo
 
 	/**
 	 * Handle http request.
 	 */
+	@subscribe({
+		subject: HTTP_SUBJECT,
+		requestSchema: CreateFooRequest,
+		responseSchema: FooWithBar,
+		permissions: ["foo.create"],
+		docs: {
+			description: "Create a foo",
+			errors: {
+				INTERNAL_SERVER_ERROR: "Something unexpected happened"
+			}
+		}
+	})
 	async handleHttp({ reqId, data, user }: FrusterRequest<FooModel>): Promise<FrusterResponse<FooModel>> {
 		const foo = await this.fooRepo.create(data, user.id);
 
@@ -23,7 +43,7 @@ class CreateFooHandler {
 		log.audit(user.id, `Foo is created - ${foo.id}`); //Log audit need when adding/modifying the db record
 
 		return {
-			reqId: "", //TODO: Why need this? Ask by Victor
+			reqId,
 			status: 201,
 			data: foo
 		};

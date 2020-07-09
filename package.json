@@ -9,7 +9,7 @@
 		"test:watch": "ts-node-dev --respawn --no-notify ./spec/support/jasmine-runner.ts"
 	},
 	"dependencies": {
-		"fruster-bus": "^0.7.5",
+		"fruster-bus": "^0.7.6",
 		"fruster-errors": "0.1.2",
 		"fruster-health": "^0.0.14",
 		"fruster-log": "^0.0.18",
@@ -26,7 +26,8 @@
 		"nyc": "^15.1.0",
 		"ts-node": "^8.10.2",
 		"ts-node-dev": "^1.0.0-pre.50",
-		"typescript": "^3.9.6"
+		"typescript": "^3.9.6",
+		"fruster-decorators": "G:/Documents/proj/frost/fruster/fruster-decorators"
 	},
 	"nyc": {
 		"exclude": [

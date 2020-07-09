@@ -3,7 +3,7 @@ import constants from "../../lib/constants";
 import { start } from "../../fruster-template-service";
 
 export default {
-	testUtilsOptions: (afterStart?: Function) => {
+	testUtilsOptions: (afterStart: Function = () => { }) => {
 		return {
 			mockNats: true,
 			bus,

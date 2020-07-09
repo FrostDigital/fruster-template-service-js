@@ -1,8 +1,8 @@
 import fixtures from "./support/fixtures";
-import constants from "../lib/constants";
 import specConstants from "./support/spec-constants";
+import { HTTP_SUBJECT } from "../lib/handlers/CreateFooHandler";
+import { testBus as bus } from "fruster-bus";
 
-const bus = require("fruster-bus").testBus;
 const frusterTestUtils = require("fruster-test-utils");
 
 describe("CreateFooHandler", () => {
@@ -14,11 +14,10 @@ describe("CreateFooHandler", () => {
 			const user = { ...fixtures.user, scopes: ["some-scope-not-valid-for-endpoint"] };
 
 			await bus.request({
-				subject: constants.endpoints.http.CREATE_FOO,
-				skipOptionsRequest: true,
+				subject: HTTP_SUBJECT,
+
 				message: {
 					user: user,
-					reqId: "reqId",
 					data: fixtures.createFooRequest
 				}
 			});
@@ -36,11 +35,9 @@ describe("CreateFooHandler", () => {
 		const user = { ...fixtures.user, scopes: ["foo.create"] };
 
 		const { status } = await bus.request({
-			subject: constants.endpoints.http.CREATE_FOO,
-			skipOptionsRequest: true,
+			subject: HTTP_SUBJECT,
 			message: {
 				user,
-				reqId: "reqId",
 				data: fixtures.createFooRequest
 			}
 		});

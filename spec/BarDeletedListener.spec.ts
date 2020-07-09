@@ -1,13 +1,13 @@
 import { v4 } from "uuid";
 import { Db } from "mongodb";
 import FooRepo from "../lib/repos/FooRepo";
-import constants from "../lib/constants";
 import errors from "../lib/errors";
 import fixtures from "./support/fixtures";
 import specConstants from "./support/spec-constants";
 import FooModel from "../lib/models/FooModel";
+import { LISTENER_SUBJECT } from "../lib/listeners/BarDeletedListener";
+import { testBus as bus } from "fruster-bus";
 
-const bus = require("fruster-bus").testBus;
 const frusterTestUtils = require("fruster-test-utils");
 
 describe("BarDeletedListener", () => {
@@ -26,8 +26,7 @@ describe("BarDeletedListener", () => {
 	it("should return BAD_REQUEST if received invalid data", async done => {
 		try {
 			await bus.request({
-				subject: constants.endpoints.listener.BAR_DELETED,
-				skipOptionsRequest: true,
+				subject: LISTENER_SUBJECT,
 				message: {
 					user: fixtures.user,
 					reqId: "reqId",
@@ -52,8 +51,7 @@ describe("BarDeletedListener", () => {
 		await createFoo({ ...fixtures.foo, barId });
 
 		const { status, data } = await bus.request({
-			subject: constants.endpoints.listener.BAR_DELETED,
-			skipOptionsRequest: true,
+			subject: LISTENER_SUBJECT,
 			message: {
 				reqId: "reqId",
 				data: { barId }

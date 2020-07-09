@@ -5,6 +5,7 @@ import errors from "../lib/errors";
 import BarServiceClient from "../lib/clients/BarServiceClient";
 import specConstants from "./support/spec-constants";
 import fixtures from "./support/fixtures";
+import { SERVICE_SUBJECT } from "../lib/handlers/GetFooHandler";
 
 const frusterTestUtils = require("fruster-test-utils");
 const bus = require("fruster-bus").testBus;
@@ -20,7 +21,7 @@ describe("GetFooHandler", () => {
 	it("should return BAD_REQUEST if id is not a uuid", async (done) => {
 		try {
 			await bus.request({
-				subject: constants.endpoints.service.GET_FOO,
+				subject: SERVICE_SUBJECT,
 				message: {
 					user: fixtures.user,
 					data: { id: "fake" }
@@ -39,10 +40,10 @@ describe("GetFooHandler", () => {
 	it("should return NOT_FOUND if Foo does not exist", async done => {
 		try {
 			await bus.request({
-				subject: constants.endpoints.service.GET_FOO,
+				subject: SERVICE_SUBJECT,
 				message: {
 					user: fixtures.user,
-					data: { id: fixtures.foo.id }  // <- does not exist
+					data: { id: v4() }  // <- does not exist
 				}
 			});
 
@@ -60,7 +61,7 @@ describe("GetFooHandler", () => {
 			const user = { ...fixtures.user, scopes: ["some-scope-not-valid-for-endpoint"] };
 
 			await bus.request({
-				subject: constants.endpoints.service.GET_FOO,
+				subject: SERVICE_SUBJECT,
 				message: {
 					user: user,
 					data: { id: fixtures.foo.id }
@@ -98,7 +99,7 @@ describe("GetFooHandler", () => {
 		});
 
 		const { status } = await bus.request({
-			subject: constants.endpoints.service.GET_FOO,
+			subject: SERVICE_SUBJECT,
 			message: {
 				user: fixtures.user,
 				data: { id: foo.id }
