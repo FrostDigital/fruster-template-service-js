@@ -1,4 +1,4 @@
-const bus = require("fruster-bus");
+import bus from "fruster-bus";
 import { connect, Db } from "mongodb";
 import constants from "./lib/constants";
 import docs from "./lib/docs";
@@ -37,7 +37,7 @@ function registerHandlers(db: Db) {
 		responseSchema: FooWithBar,
 		permissions: constants.permissions.CREATE_FOO,
 		docs: docs.http.CREATE_FOO,
-		handle: (req: any) => createFooHandler.handleHttp(req)
+		handle: (req: any): any => createFooHandler.handleHttp(req)
 	});
 
 	// SERVICE
@@ -48,7 +48,7 @@ function registerHandlers(db: Db) {
 		responseSchema: FooWithBar,
 		permissions: constants.permissions.GET_FOO,
 		docs: docs.service.GET_FOO,
-		handle: (req: any) => getFooHandler.handle(req)
+		handle: (req: any): any => getFooHandler.handle(req)
 	});
 
 	// LISTENERS
@@ -58,7 +58,7 @@ function registerHandlers(db: Db) {
 		requestSchema: DeleteFoosByBarIdRequest,
 		docs: docs.listener.BAR_DELETED,
 		createQueueGroup: false,
-		handle: (req: any) => barDeletedListener.handle(req)
+		handle: (req: any): any => barDeletedListener.handle(req)
 	});
 }
 

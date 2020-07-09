@@ -59,7 +59,7 @@ describe("FooRepo", () => {
 	});
 
 	it("should find all foos", async done => {
-		const foo = fixtures.foo;
+		const foo = { ...fixtures.foo };
 		delete foo.id;
 
 		await createFoo(foo, fixtures.user);

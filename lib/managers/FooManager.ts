@@ -26,7 +26,9 @@ class FooManager {
 			throw errors.notFound(`Foo is not found for id ${id}`);
 
 		if (foo.barId)
-			foo.bar = await BarServiceClient.getBar({ reqId, barId: foo.barId });
+			foo.bar = await BarServiceClient.getBar(reqId, {
+				barId: foo.barId
+			});
 
 		return foo;
 	}
