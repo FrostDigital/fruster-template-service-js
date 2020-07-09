@@ -23,7 +23,7 @@ class CreateFooHandler {
 		log.audit(user.id, `Foo is created - ${foo.id}`); //Log audit need when adding/modifying the db record
 
 		return {
-			reqId: "", //TODO: Why need this? Ask by Victor
+			reqId, //TODO: Why need this? Ask by Victor
 			status: 201,
 			data: foo
 		};
