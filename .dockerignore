@@ -9,4 +9,3 @@ node_modules
 .editorconfig
 .jshintrc
 README.md
-tsconfig.json
