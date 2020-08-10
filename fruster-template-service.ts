@@ -20,8 +20,11 @@ export const start = async (busAddress: string, mongoUrl: string) => {
 };
 
 function registerHandlers(db: Db) {
-	injections({ fooRepo: new FooRepo(db) });
-	injections({ fooManager: new FooManager() });
+	// Also supports calling the `injections` function multiple times, it will append all function calls to the list of injections
+	injections({
+		fooRepo: new FooRepo(db),
+		fooManager: new FooManager()
+	});
 
 	/**
 	 * Http handlers
