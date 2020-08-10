@@ -42,7 +42,7 @@ class GetFooHandler {
 		const foo = await this.fooManager.getFooWithBarById(reqId, id);
 
 		return {
-			reqId: "", //TODO
+			reqId, // TODO: Fix required in fruster-bus
 			status: 200,
 			data: foo
 		};
