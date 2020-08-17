@@ -1,4 +1,3 @@
-const bus = require("fruster-bus");
 import { connect, Db } from "mongodb";
 import constants from "./lib/constants";
 import FooRepo from "./lib/repos/FooRepo";
@@ -7,6 +6,7 @@ import GetFooHandler from "./lib/handlers/GetFooHandler";
 import CreateFooHandler from "./lib/handlers/CreateFooHandler";
 import BarDeletedListener from "./lib/listeners/BarDeletedListener";
 import { injections } from "fruster-decorators";
+const bus = require("fruster-bus");
 
 export const start = async (busAddress: string, mongoUrl: string) => {
 	const db = await connect(mongoUrl);
@@ -20,10 +20,11 @@ export const start = async (busAddress: string, mongoUrl: string) => {
 };
 
 function registerHandlers(db: Db) {
-	// Also supports calling the `injections` function multiple times, it will append all function calls to the list of injections
+	const fooRepo: FooRepo = new FooRepo(db);
+
 	injections({
-		fooRepo: new FooRepo(db),
-		fooManager: new FooManager()
+		fooRepo,
+		fooManager: new FooManager(fooRepo)
 	});
 
 	/**

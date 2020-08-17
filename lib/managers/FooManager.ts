@@ -2,17 +2,13 @@ import BarServiceClient from "../clients/BarServiceClient";
 import FooRepo from "../repos/FooRepo";
 import FooModel from "../models/FooModel";
 import errors from "../errors";
-import { inject, injectable } from "fruster-decorators";
-
 /**
  * A manager meant to abstract reusable business logic
  * into a nice, friendly API.
  */
-@injectable()
 class FooManager {
 
-	@inject()
-	private fooRepo!: FooRepo;
+	constructor(private fooRepo: FooRepo) { }
 
 	/**
 	 * Gets foo with bar from another service.

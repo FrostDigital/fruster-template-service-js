@@ -1,6 +1,6 @@
 import constants from "./lib/constants";
 import config from "./config";
-import service from "./fruster-template-service";
+import { start } from "./fruster-template-service";
 const log = require("fruster-log");
 require("fruster-health").start();
 
@@ -13,7 +13,7 @@ require("fruster-health").start();
  */
 (async function () {
 	try {
-		await service.start(config.bus, config.mongoUrl);
+		await start(config.bus, config.mongoUrl);
 		log.info(`Successfully started ${constants.SERVICE_NAME}`);
 	} catch (err) {
 		log.error(`Failed starting ${constants.SERVICE_NAME}`, err);
