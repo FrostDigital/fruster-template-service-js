@@ -27,7 +27,7 @@
 		"ts-node": "^8.10.2",
 		"ts-node-dev": "^1.0.0-pre.50",
 		"typescript": "^3.9.6",
-		"fruster-decorators": "G:/Documents/proj/frost/fruster/fruster-decorators"
+		"fruster-decorators": "0.1.0"
 	},
 	"nyc": {
 		"exclude": [
