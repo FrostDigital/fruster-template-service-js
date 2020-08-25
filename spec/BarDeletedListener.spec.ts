@@ -52,7 +52,7 @@ describe("BarDeletedListener", () => {
 		await createFoo({ ...fixtures.foo, barId });
 		await createFoo({ ...fixtures.foo, barId });
 
-		const { status, data } = await testBus.request({
+		const { status, data } = await testBus.request<{ barId: string }, { deletedCount: number }>({
 			subject: constants.endpoints.listener.BAR_DELETED,
 			skipOptionsRequest: true,
 			message: {

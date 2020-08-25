@@ -20,7 +20,6 @@ class GetFooHandler {
 		const foo = await this.fooManager.getFooWithBarById(reqId, id);
 
 		return {
-			reqId, //TODO
 			status: 200,
 			data: foo
 		};

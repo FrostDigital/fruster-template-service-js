@@ -59,8 +59,8 @@ describe("FooRepo", () => {
 	});
 
 	it("should find all foos", async done => {
-		const foo = { ...fixtures.foo };
-		delete foo.id;
+		const { id, foo }: any = { ...fixtures.foo };
+
 
 		await createFoo(foo, fixtures.user);
 		await createFoo(foo, fixtures.user);
