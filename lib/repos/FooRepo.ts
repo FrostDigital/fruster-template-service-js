@@ -37,7 +37,7 @@ class FooRepo {
 	/**
 	 * Creates a new foo.
 	 */
-	async create(foo: FooModel, createdBy: string): Promise<FooModel> {
+	async create(foo: Partial<FooModel>, createdBy: string): Promise<FooModel> {
 		const { ops } = await this.collection.insertOne({
 			...foo,
 			id: uuidV4(),

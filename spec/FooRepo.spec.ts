@@ -59,8 +59,7 @@ describe("FooRepo", () => {
 	});
 
 	it("should find all foos", async done => {
-		const foo = fixtures.foo;
-		delete foo.id;
+		const { id, ...foo } = fixtures.foo;
 
 		await createFoo(foo, fixtures.user);
 		await createFoo(foo, fixtures.user);
@@ -72,7 +71,7 @@ describe("FooRepo", () => {
 		done();
 	});
 
-	async function createFoo(foo: FooModel, user: any) {
+	async function createFoo(foo: Partial<FooModel>, user: any) {
 		return await repo.create(foo, user.id);
 	}
 

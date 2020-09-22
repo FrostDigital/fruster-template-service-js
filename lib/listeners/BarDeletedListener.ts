@@ -6,11 +6,11 @@ import DeleteFoosByBarIdRequest from "../schemas/DeleteFoosByBarIdRequest";
 
 export const LISTENER_SUBJECT = "pub.bar-service.bar-deleted";
 
-interface BarDeletedRequest {
+export interface BarDeletedRequest {
 	barId: string;
 }
 
-interface BarDeletedResponse {
+export interface BarDeletedResponse {
 	deletedCount: number;
 }
 

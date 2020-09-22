@@ -5,7 +5,7 @@ import errors from "../lib/errors";
 import fixtures from "./support/fixtures";
 import specConstants from "./support/spec-constants";
 import FooModel from "../lib/models/FooModel";
-import { LISTENER_SUBJECT } from "../lib/listeners/BarDeletedListener";
+import { LISTENER_SUBJECT, BarDeletedRequest, BarDeletedResponse } from "../lib/listeners/BarDeletedListener";
 import { testBus as bus } from "fruster-bus";
 
 const frusterTestUtils = require("fruster-test-utils");
@@ -50,7 +50,7 @@ describe("BarDeletedListener", () => {
 		await createFoo({ ...fixtures.foo, barId });
 		await createFoo({ ...fixtures.foo, barId });
 
-		const { status, data } = await bus.request({
+		const { status, data } = await bus.request<BarDeletedRequest, BarDeletedResponse>({
 			subject: LISTENER_SUBJECT,
 			message: {
 				reqId: "reqId",
