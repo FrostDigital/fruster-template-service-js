@@ -1,26 +1,26 @@
 import { v4 } from "uuid";
 import { Db } from "mongodb";
-import { testBus } from "fruster-bus";
+import { testBus as bus } from "fruster-bus";
+import frusterTestUtils from "fruster-test-utils";
 import constants from "../lib/constants";
 import errors from "../lib/errors";
 import BarServiceClient from "../lib/clients/BarServiceClient";
 import specConstants from "./support/spec-constants";
 import fixtures from "./support/fixtures";
-
-const frusterTestUtils = require("fruster-test-utils");
+import { SERVICE_SUBJECT } from "../lib/handlers/GetFooHandler";
 
 describe("GetFooHandler", () => {
 
 	let db: Db;
 
-	frusterTestUtils.startBeforeEach(specConstants.testUtilsOptions(
-		async (connection: any) => db = connection.db)
-	);
+	frusterTestUtils.startBeforeEach(
+		specConstants.testUtilsOptions(
+			async (connection: any) => db = connection.db));
 
 	it("should return BAD_REQUEST if id is not a uuid", async (done) => {
 		try {
-			await testBus.request({
-				subject: constants.endpoints.service.GET_FOO,
+			await bus.request({
+				subject: SERVICE_SUBJECT,
 				message: {
 					user: fixtures.user,
 					data: { id: "fake" }
@@ -38,11 +38,11 @@ describe("GetFooHandler", () => {
 
 	it("should return NOT_FOUND if Foo does not exist", async done => {
 		try {
-			await testBus.request({
-				subject: constants.endpoints.service.GET_FOO,
+			await bus.request({
+				subject: SERVICE_SUBJECT,
 				message: {
 					user: fixtures.user,
-					data: { id: fixtures.foo.id }  // <- does not exist
+					data: { id: v4() }  // <- does not exist
 				}
 			});
 
@@ -59,8 +59,8 @@ describe("GetFooHandler", () => {
 		try {
 			const user = { ...fixtures.user, scopes: ["some-scope-not-valid-for-endpoint"] };
 
-			await testBus.request({
-				subject: constants.endpoints.service.GET_FOO,
+			await bus.request({
+				subject: SERVICE_SUBJECT,
 				message: {
 					user: user,
 					data: { id: fixtures.foo.id }
@@ -97,8 +97,8 @@ describe("GetFooHandler", () => {
 			})
 		});
 
-		const { status } = await testBus.request({
-			subject: constants.endpoints.service.GET_FOO,
+		const { status } = await bus.request({
+			subject: SERVICE_SUBJECT,
 			message: {
 				user: fixtures.user,
 				data: { id: foo.id }

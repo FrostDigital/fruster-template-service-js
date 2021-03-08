@@ -2,7 +2,6 @@ import BarServiceClient from "../clients/BarServiceClient";
 import FooRepo from "../repos/FooRepo";
 import FooModel from "../models/FooModel";
 import errors from "../errors";
-
 /**
  * A manager meant to abstract reusable business logic
  * into a nice, friendly API.

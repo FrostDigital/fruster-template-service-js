@@ -1,10 +1,9 @@
 import { Db } from "mongodb";
+import frusterTestUtils from "fruster-test-utils";
 import FooRepo from "../lib/repos/FooRepo";
 import FooModel from "../lib/models/FooModel";
 import fixtures from "./support/fixtures";
 import specConstants from "./support/spec-constants";
-
-const frusterTestUtils = require("fruster-test-utils");
 
 describe("FooRepo", () => {
 
@@ -59,8 +58,7 @@ describe("FooRepo", () => {
 	});
 
 	it("should find all foos", async done => {
-		const { id, foo }: any = { ...fixtures.foo };
-
+		const { id, ...foo } = fixtures.foo;
 
 		await createFoo(foo, fixtures.user);
 		await createFoo(foo, fixtures.user);
@@ -72,7 +70,7 @@ describe("FooRepo", () => {
 		done();
 	});
 
-	async function createFoo(foo: FooModel, user: any) {
+	async function createFoo(foo: Partial<FooModel>, user: any) {
 		return await repo.create(foo, user.id);
 	}
 

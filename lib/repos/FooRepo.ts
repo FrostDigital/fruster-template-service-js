@@ -13,6 +13,7 @@ import FooModel from "../models/FooModel";
  * `delete foo_id` in create.
  */
 class FooRepo {
+
 	private collection: Collection;
 
 	constructor(db: Db) {
@@ -29,14 +30,14 @@ class FooRepo {
 	/**
 	 * Find all Foo's.
 	 */
-	async findAll() {
+	async findAll(): Promise<FooModel[]> {
 		return this.collection.find({}, { fields: { _id: 0 } }).toArray();
 	}
 
 	/**
 	 * Creates a new foo.
 	 */
-	async create(foo: FooModel, createdBy: string): Promise<FooModel> {
+	async create(foo: Partial<FooModel>, createdBy: string): Promise<FooModel> {
 		const { ops } = await this.collection.insertOne({
 			...foo,
 			id: uuidV4(),

@@ -1,15 +1,13 @@
 import { v4 } from "uuid";
 import { Db } from "mongodb";
+import { testBus as bus } from "fruster-bus";
+import frusterTestUtils from "fruster-test-utils";
 import FooRepo from "../lib/repos/FooRepo";
-import constants from "../lib/constants";
 import errors from "../lib/errors";
 import fixtures from "./support/fixtures";
 import specConstants from "./support/spec-constants";
 import FooModel from "../lib/models/FooModel";
-
-import { testBus } from "fruster-bus";
-
-const frusterTestUtils = require("fruster-test-utils");
+import { LISTENER_SUBJECT, BarDeletedRequest, BarDeletedResponse } from "../lib/listeners/BarDeletedListener";
 
 describe("BarDeletedListener", () => {
 
@@ -26,9 +24,8 @@ describe("BarDeletedListener", () => {
 
 	it("should return BAD_REQUEST if received invalid data", async done => {
 		try {
-			await testBus.request({
-				subject: constants.endpoints.listener.BAR_DELETED,
-				skipOptionsRequest: true,
+			await bus.request({
+				subject: LISTENER_SUBJECT,
 				message: {
 					user: fixtures.user,
 					reqId: "reqId",
@@ -52,9 +49,8 @@ describe("BarDeletedListener", () => {
 		await createFoo({ ...fixtures.foo, barId });
 		await createFoo({ ...fixtures.foo, barId });
 
-		const { status, data } = await testBus.request<{ barId: string }, { deletedCount: number }>({
-			subject: constants.endpoints.listener.BAR_DELETED,
-			skipOptionsRequest: true,
+		const { status, data } = await bus.request<BarDeletedRequest, BarDeletedResponse>({
+			subject: LISTENER_SUBJECT,
 			message: {
 				reqId: "reqId",
 				data: { barId }

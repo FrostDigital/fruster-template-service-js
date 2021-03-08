@@ -1,24 +1,22 @@
-import { testBus } from "fruster-bus";
+import { testBus as bus } from "fruster-bus";
+import frusterTestUtils from "fruster-test-utils";
 import fixtures from "./support/fixtures";
-import constants from "../lib/constants";
 import specConstants from "./support/spec-constants";
-
-const frusterTestUtils = require("fruster-test-utils");
+import { HTTP_SUBJECT } from "../lib/handlers/CreateFooHandler";
 
 describe("CreateFooHandler", () => {
 
-	frusterTestUtils.startBeforeEach(specConstants.testUtilsOptions(() => { }));
+	frusterTestUtils.startBeforeEach(specConstants.testUtilsOptions());
 
 	it("should return PERMISSION_DENIED if user has not permission to create foo", async done => {
 		try {
 			const user = { ...fixtures.user, scopes: ["some-scope-not-valid-for-endpoint"] };
 
-			await testBus.request({
-				subject: constants.endpoints.http.CREATE_FOO,
-				skipOptionsRequest: true,
+			await bus.request({
+				subject: HTTP_SUBJECT,
+
 				message: {
 					user: user,
-					reqId: "reqId",
 					data: fixtures.createFooRequest
 				}
 			});
@@ -35,12 +33,10 @@ describe("CreateFooHandler", () => {
 	it("should possible to create Foo", async () => {
 		const user = { ...fixtures.user, scopes: ["foo.create"] };
 
-		const { status } = await testBus.request({
-			subject: constants.endpoints.http.CREATE_FOO,
-			skipOptionsRequest: true,
+		const { status } = await bus.request({
+			subject: HTTP_SUBJECT,
 			message: {
 				user,
-				reqId: "reqId",
 				data: fixtures.createFooRequest
 			}
 		});
