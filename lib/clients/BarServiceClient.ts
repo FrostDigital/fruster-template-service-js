@@ -1,4 +1,5 @@
 import bus from "fruster-bus";
+import { BarModel } from "../models/BarModel";
 
 interface GetBarRequest {
 	barId: string;
@@ -6,7 +7,7 @@ interface GetBarRequest {
 
 interface GetBarResponse {
 	id: string;
-	bar: string;
+	bar: BarModel;
 }
 
 /**

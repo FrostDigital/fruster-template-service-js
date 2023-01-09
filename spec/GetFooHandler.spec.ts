@@ -8,6 +8,7 @@ import BarServiceClient from "../lib/clients/BarServiceClient";
 import specConstants from "./support/spec-constants";
 import fixtures from "./support/fixtures";
 import { SERVICE_SUBJECT } from "../lib/handlers/GetFooHandler";
+import { BarType } from "../lib/models/BarModel";
 
 describe("GetFooHandler", () => {
 
@@ -81,20 +82,22 @@ describe("GetFooHandler", () => {
 			...fixtures.foo,
 			id: v4(),
 			barId: "ramjam",
-			created: new Date(),
-			createdBy: fixtures.user.id,
+			metadata: {
+				created: new Date(),
+				createdBy: fixtures.user.id
+			},
 			description: "test"
 		};
-		const bar = (id: string) => ({ id, bar: "bar" });
+		const bar = (id: string, type:BarType) => ({ id, type });
 
 		await db.collection(constants.collections.FOOS).insertOne(foo);
 
 		const mockGetBarRequest = frusterTestUtils.mockService({
 			subject: BarServiceClient.endpoints.GET_BAR,
-			response: ({ data: { barId } }: any) => ({
+			response: {
 				status: 200,
-				data: bar(barId)
-			})
+				data: bar(foo.barId, BarType.E_TYPE)
+			}
 		});
 
 		const { status } = await bus.request({

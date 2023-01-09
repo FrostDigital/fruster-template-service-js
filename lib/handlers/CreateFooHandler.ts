@@ -4,8 +4,10 @@ import FooRepo from "../repos/FooRepo";
 import FooModel from "../models/FooModel";
 import Publishes from "../Publishes";
 import { subscribe, injectable, inject } from "fruster-decorators";
-import FooWithBar from "../schemas/FooWithBar";
-import CreateFooRequest from "../schemas/CreateFooRequest";
+
+import{ CREATE_FOO_REQUEST } from "../schemas/CreateFooRequest";
+import { FOO_WITH_BAR } from "../schemas/FooWithBar";
+import { FOO } from "../schemas/Foo";
 
 export const HTTP_SUBJECT = "http.post.foo";
 
@@ -23,8 +25,8 @@ class CreateFooHandler {
 	 */
 	@subscribe({
 		subject: HTTP_SUBJECT,
-		requestSchema: CreateFooRequest,
-		responseSchema: FooWithBar,
+		requestSchema: CREATE_FOO_REQUEST,
+		responseSchema: FOO,
 		permissions: ["foo.create"],
 		docs: {
 			description: "Create a foo",

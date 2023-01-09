@@ -2,7 +2,8 @@ import { FrusterRequest, FrusterResponse } from "fruster-bus";
 import FooRepo from "../repos/FooRepo";
 const log = require("fruster-log");
 import { injectable, inject, subscribe } from "fruster-decorators";
-import DeleteFoosByBarIdRequest from "../schemas/DeleteFoosByBarIdRequest";
+import { DELETE_FOOS_BY_BAR_ID_REQUEST } from "../schemas/DeleteFoosByBarIdRequest";
+
 
 export const LISTENER_SUBJECT = "pub.bar-service.bar-deleted";
 
@@ -30,7 +31,7 @@ class BarDeletedListener {
 	 */
 	@subscribe({
 		subject: LISTENER_SUBJECT,
-		requestSchema: DeleteFoosByBarIdRequest,
+		requestSchema: DELETE_FOOS_BY_BAR_ID_REQUEST,
 		docs: { description: "Delete all foos by bar id via listening to bar service" },
 		createQueueGroup: false
 	})

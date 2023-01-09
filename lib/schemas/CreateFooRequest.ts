@@ -1,18 +1,8 @@
-import Foo from "./Foo";
+import { Foo } from "./Foo"
 
-export default {
-	id: "CreateFooRequest",
-	description: "Foo with bar",
-	properties: {
-		name: {
-			...Foo.properties.name
-		},
-		description: {
-			...Foo.properties.description
-		}
-	},
-	required: [
-		"name",
-		"description"
-	]
-};
+export interface CreateFooRequest extends Pick<Foo, "name"|"description"> {
+
+	barId?:string
+}
+
+export const CREATE_FOO_REQUEST = "CreateFooRequest"

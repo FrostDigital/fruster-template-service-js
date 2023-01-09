@@ -41,12 +41,13 @@ class FooRepo {
 		const { ops } = await this.collection.insertOne({
 			...foo,
 			id: uuidV4(),
-			created: new Date(),
-			createdBy
+			metadata: {
+				created: new Date(),
+				createdBy
+			}
 		});
 
 		delete ops[0]._id;
-
 		return ops[0];
 	}
 

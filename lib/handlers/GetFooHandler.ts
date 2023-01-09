@@ -2,8 +2,8 @@ import { FrusterRequest, FrusterResponse } from "fruster-bus";
 import FooManager from "../managers/FooManager";
 import FooModel from "../models/FooModel";
 import { injectable, inject, subscribe } from "fruster-decorators";
-import GetFooRequest from "../schemas/GetFooRequest";
-import FooWithBar from "../schemas/FooWithBar";
+import { FOO_WITH_BAR } from "../schemas/FooWithBar";
+import { GET_FOO_REQUEST } from "../schemas/GetFooRequest";
 
 interface GetFooRequest {
 	id: string;
@@ -25,8 +25,8 @@ class GetFooHandler {
 	 */
 	@subscribe({
 		subject: SERVICE_SUBJECT,
-		requestSchema: GetFooRequest,
-		responseSchema: FooWithBar,
+		requestSchema: GET_FOO_REQUEST,
+		responseSchema: FOO_WITH_BAR,
 		permissions: ["foo.get"],
 		docs: {
 			description: "Returns a foo by its id",
