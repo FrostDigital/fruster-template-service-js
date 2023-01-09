@@ -8,11 +8,11 @@ export interface Foo extends FooModel {
 	 */
 	id: string
 
-	/*** @description Name of Foo */
+	/*** @description Name of Foo, required property */
 	name: string
 
-	/** @description Description of Foo */
-	description: string
+	/** @description Description of Foo, optional property */
+	description?: string
 
 	/** @description Id of related Bar */
 	barId?: string,
