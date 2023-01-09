@@ -12,4 +12,9 @@ jasmine.getEnv().addReporter(new SpecReporter());
 jRunner.loadConfigFile("./spec/support/jasmine.json");
 jRunner.execute();
 
+if (process.env.CI) {
+	jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
+	process.env.OPTIONS_TIMEOUT = "500ms";
+}
+
 export default () => { };
