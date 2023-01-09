@@ -9,9 +9,10 @@
 		"test:watch": "ts-node-dev --respawn --no-notify ./spec/support/jasmine-runner.ts"
 	},
 	"dependencies": {
-		"fruster-bus": "^0.7.12",
+		"fruster-bus": "0.7.12-5",
+		"fruster-bus-ts-schema-resolver": "0.0.8",
 		"fruster-errors": "0.1.2",
-		"fruster-health": "^0.1.0",
+		"fruster-health": "^0.0.15",
 		"fruster-log": "^0.1.1",
 		"mongodb": "^2.2.36"
 	},
@@ -24,6 +25,7 @@
 		"fruster-test-utils": "^0.6.5",
 		"jasmine": "^3.6.4",
 		"jasmine-spec-reporter": "^6.0.0",
+		"json-schema-typed": "^7.0.3",
 		"nyc": "^15.1.0",
 		"ts-node": "^9.1.1",
 		"ts-node-dev": "^1.1.6",
