@@ -1,14 +1,10 @@
-import Foo from "./Foo";
+export interface GetFooRequest {
 
-export default {
-	id: "GetFooRequest",
-	description: "Request to get a Foo by its id",
-	type: "object",
-	additionalProperties: false,
-	properties: {
-		id: { ...Foo.properties.id }
-	},
-	required: [
-		"id"
-	]
+	/**
+	 * @description id of Foo
+	 * @format uuid
+	 */
+	id:string
 }
+
+export const GET_FOO_REQUEST = "GetFooRequest";
