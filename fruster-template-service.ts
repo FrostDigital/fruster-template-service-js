@@ -1,12 +1,13 @@
-import bus from "fruster-bus";
+import bus from "@fruster/bus";
+import { injections } from "@fruster/decorators";
 import { connect, Db } from "mongodb";
+
 import constants from "./lib/constants";
 import FooRepo from "./lib/repos/FooRepo";
 import FooManager from "./lib/managers/FooManager";
 import GetFooHandler from "./lib/handlers/GetFooHandler";
 import CreateFooHandler from "./lib/handlers/CreateFooHandler";
 import BarDeletedListener from "./lib/listeners/BarDeletedListener";
-import { injections } from "fruster-decorators";
 
 export const start = async (busAddress: string, mongoUrl: string) => {
 	const db = await connect(mongoUrl);

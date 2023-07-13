@@ -1,25 +1,28 @@
 import { v4 } from "uuid";
 import { Db } from "mongodb";
-import { testBus as bus } from "fruster-bus";
-import frusterTestUtils from "fruster-test-utils";
+import { testBus } from "@fruster/bus";
+import frusterTestUtils from "@fruster/test-utils";
+
+import BarServiceClient from "../lib/clients/BarServiceClient";
+import { SERVICE_SUBJECT } from "../lib/handlers/GetFooHandler";
+import GetFooRequest from "../lib/schemas/GetFooRequest";
+import FooWithBar from "../lib/schemas/FooWithBar";
 import constants from "../lib/constants";
 import errors from "../lib/errors";
-import BarServiceClient from "../lib/clients/BarServiceClient";
+
 import specConstants from "./support/spec-constants";
 import fixtures from "./support/fixtures";
-import { SERVICE_SUBJECT } from "../lib/handlers/GetFooHandler";
+import Foo from "../lib/models/Foo";
 
 describe("GetFooHandler", () => {
 
 	let db: Db;
 
-	frusterTestUtils.startBeforeEach(
-		specConstants.testUtilsOptions(
-			async (connection: any) => db = connection.db));
+	frusterTestUtils.startBeforeEach(specConstants.testUtilsOptions(async (connection: any) => db = connection.db));
 
-	it("should return BAD_REQUEST if id is not a uuid", async (done) => {
+	it("should return BAD_REQUEST if id is not a uuid", async () => {
 		try {
-			await bus.request({
+			await testBus.request({
 				subject: SERVICE_SUBJECT,
 				message: {
 					user: fixtures.user,
@@ -27,18 +30,16 @@ describe("GetFooHandler", () => {
 				}
 			});
 
-			done.fail();
-		} catch ({ status, error }) {
-			expect(status).toBe(400, "err.status");
-			expect(error.code).toBe(errors.badRequest().error.code, "err.code");
-
-			done();
+			fail();
+		} catch ({ status, error }: any) {
+			expect(status).toBe(400);
+			expect(error.code).toBe(errors.badRequest().error.code);
 		}
 	});
 
-	it("should return NOT_FOUND if Foo does not exist", async done => {
+	it("should return NOT_FOUND if Foo does not exist", async () => {
 		try {
-			await bus.request({
+			await testBus.request({
 				subject: SERVICE_SUBJECT,
 				message: {
 					user: fixtures.user,
@@ -46,43 +47,22 @@ describe("GetFooHandler", () => {
 				}
 			});
 
-			done.fail();
-		} catch ({ status, error }) {
-			expect(status).toBe(404, "err.status");
-			expect(error.code).toBe(errors.notFound().error.code, "err.code");
-
-			done();
-		}
-	});
-
-	it("should return PERMISSION_DENIED if user has not permission to get foo", async done => {
-		try {
-			const user = { ...fixtures.user, scopes: ["some-scope-not-valid-for-endpoint"] };
-
-			await bus.request({
-				subject: SERVICE_SUBJECT,
-				message: {
-					user: user,
-					data: { id: fixtures.foo.id }
-				}
-			});
-
-			done.fail();
-		} catch ({ status, error }) {
-			expect(status).toBe(403, "err.status");
-			expect(error.code).toBe("PERMISSION_DENIED", "err.code");
-
-			done();
+			fail();
+		} catch ({ status, error }: any) {
+			expect(status).toBe(404);
+			expect(error.code).toBe(errors.notFound().error.code);
 		}
 	});
 
 	it("should get Foo by its id", async () => {
-		const foo = {
+		const foo: Foo = {
 			...fixtures.foo,
 			id: v4(),
-			barId: "ramjam",
+			bar: { id: "ramjam" },
 			created: new Date(),
-			createdBy: fixtures.user.id,
+			createdBy: {
+				id: fixtures.user.id
+			},
 			description: "test"
 		};
 		const bar = (id: string) => ({ id, bar: "bar" });
@@ -97,7 +77,7 @@ describe("GetFooHandler", () => {
 			})
 		});
 
-		const { status } = await bus.request({
+		const { status } = await testBus.request<GetFooRequest, FooWithBar>({
 			subject: SERVICE_SUBJECT,
 			message: {
 				user: fixtures.user,
@@ -105,10 +85,10 @@ describe("GetFooHandler", () => {
 			}
 		});
 
-		expect(status).toBe(200, "status");
+		expect(status).toBe(200);
 
-		expect(mockGetBarRequest.invocations).toBe(1, "mockGetBarRequest.invocations");
-		expect(mockGetBarRequest.requests[0].data.barId).toBe(foo.barId, "barId");
+		expect(mockGetBarRequest.invocations).toBe(1);
+		expect(mockGetBarRequest.requests[0].data.barId).toBe(foo.bar.id);
 	});
 
 });

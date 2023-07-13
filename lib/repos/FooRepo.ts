@@ -1,7 +1,8 @@
 import { v4 as uuidV4 } from "uuid";
 import { Db, Collection } from "mongodb";
+
 import constants from "../constants";
-import FooModel from "../models/FooModel";
+import Foo from "../models/Foo";
 
 /**
  * A repository meant to handle any operations to the database, in this case mongo db.
@@ -23,26 +24,26 @@ class FooRepo {
 	/**
 	 * Get Foo by id.
 	 */
-	async getById(id: string): Promise<FooModel | null> {
+	async getById(id: string): Promise<Foo | null> {
 		return await this.collection.findOne({ id }, { fields: { _id: 0 } });
 	}
 
 	/**
 	 * Find all Foo's.
 	 */
-	async findAll(): Promise<FooModel[]> {
+	async findAll(): Promise<Foo[]> {
 		return this.collection.find({}, { fields: { _id: 0 } }).toArray();
 	}
 
 	/**
 	 * Creates a new foo.
 	 */
-	async create(foo: Partial<FooModel>, createdBy: string): Promise<FooModel> {
+	async create(foo: Partial<Foo>, createdById: string): Promise<Foo> {
 		const { ops } = await this.collection.insertOne({
 			...foo,
 			id: uuidV4(),
 			created: new Date(),
-			createdBy
+			createdBy: { id: createdById }
 		});
 
 		delete ops[0]._id;
@@ -53,7 +54,7 @@ class FooRepo {
 	/**
 	 * Updates Foo.
 	 */
-	async update(id: string, changes: object): Promise<FooModel | null> {
+	async update(id: string, changes: object): Promise<Foo | null> {
 		await this.collection.updateOne({ id }, { $set: changes });
 
 		return await this.getById(id);

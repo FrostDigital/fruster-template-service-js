@@ -1,8 +1,9 @@
+import log from "@fruster/log";
+import { start as healthStart } from "@fruster/health";
+
 import constants from "./lib/constants";
 import config from "./config";
 import { start } from "./fruster-template-service";
-const log = require("fruster-log");
-require("fruster-health").start();
 
 /**
  * Main entry point for starting the service.
@@ -11,10 +12,11 @@ require("fruster-health").start();
  * could not be started which most commonly happens if it cannot
  * connect to bus or mongo (if mongo is used).
  */
-(async function () {
+(async () => {
 	try {
 		await start(config.bus, config.mongoUrl);
 		log.info(`Successfully started ${constants.SERVICE_NAME}`);
+		healthStart();
 	} catch (err) {
 		log.error(`Failed starting ${constants.SERVICE_NAME}`, err);
 		process.exit(1);

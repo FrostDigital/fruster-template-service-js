@@ -1,7 +1,8 @@
 import BarServiceClient from "../clients/BarServiceClient";
 import FooRepo from "../repos/FooRepo";
-import FooModel from "../models/FooModel";
+import Foo from "../models/Foo";
 import errors from "../errors";
+
 /**
  * A manager meant to abstract reusable business logic
  * into a nice, friendly API.
@@ -12,21 +13,16 @@ class FooManager {
 
 	/**
 	 * Gets foo with bar from another service.
-	 *
-	 * @param {String} reqId the fruster request id
-	 * @param {String} id the id of the foo
-	 *
-	 * @return {Promise<FooModel>}
 	 */
-	async getFooWithBarById(reqId: string, id: string): Promise<FooModel> {
+	async getFooWithBarById(id: string): Promise<Foo> {
 		const foo = await this.fooRepo.getById(id);
 
 		if (!foo)
 			throw errors.notFound(`Foo is not found for id ${id}`);
 
-		if (foo.barId)
-			foo.bar = await BarServiceClient.getBar(reqId, {
-				barId: foo.barId
+		if (foo.bar.id)
+			foo.bar = await BarServiceClient.getBar({
+				barId: foo.bar.id
 			});
 
 		return foo;
