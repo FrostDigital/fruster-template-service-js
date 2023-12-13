@@ -1,4 +1,4 @@
-import bus from "fruster-bus";
+import bus from "@fruster/bus";
 
 class Publishes {
 
@@ -10,7 +10,10 @@ class Publishes {
 	 * Publish foo created event
 	 */
 	static fooCreated(reqId: string, fooId: string) {
-		bus.publish(Publishes.subjects.FOO_CREATED, { reqId, data: { fooId } });
+		bus.publish({
+			subject: Publishes.subjects.FOO_CREATED,
+			message: { data: { fooId } }
+		});
 	}
 
 }

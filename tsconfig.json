@@ -17,9 +17,11 @@
 		"isolatedModules": true,
 		"noEmit": true,
 		"experimentalDecorators": true,
-		"checkJs": true
+		"checkJs": true,
+		"useUnknownInCatchVariables": false
 	},
 	"exclude": [
-		"./node_modules/*"
+		"./node_modules/*",
+		"./coverage/*"
 	]
 }

@@ -1,7 +1,10 @@
 import { Db } from "mongodb";
-import frusterTestUtils from "fruster-test-utils";
+import { User } from "@fruster/bus";
+import frusterTestUtils from "@fruster/test-utils";
+
 import FooRepo from "../lib/repos/FooRepo";
-import FooModel from "../lib/models/FooModel";
+import FooModel from "../lib/models/Foo";
+
 import fixtures from "./support/fixtures";
 import specConstants from "./support/spec-constants";
 
@@ -18,25 +21,21 @@ describe("FooRepo", () => {
 				repo = new FooRepo(connection.db);
 			}));
 
-	it("should create Foo", async done => {
+	it("should create Foo", async () => {
 		const createdFoo = await createFoo(fixtures.foo, fixtures.user);
 
-		expect(createdFoo.id).toBeDefined("should have created id");
+		expect(createdFoo.id).toBeDefined();
 		//@ts-ignore
-		expect(createdFoo._id).toBeUndefined("should not leak _id");
+		expect(createdFoo._id).toBeUndefined();
 		expect(createdFoo.name).toBe(fixtures.foo.name);
-
-		done();
 	});
 
-	it("should get Foo by id", async done => {
+	it("should get Foo by id", async () => {
 		const foo = await createFoo(fixtures.foo, fixtures.user);
 
 		const retrievedFoo = await repo.getById(foo.id);
 
 		expect(retrievedFoo).toBeDefined("should have gotten foo by id");
-
-		done();
 	});
 
 	it("should get throw exception with 404 if Foo does not exist", async () => {
@@ -45,7 +44,7 @@ describe("FooRepo", () => {
 		expect(retrievedFoo).toBe(null);
 	});
 
-	it("should update Foo details", async done => {
+	it("should update Foo details", async () => {
 		const foo = await createFoo(fixtures.foo, fixtures.user);
 
 		const updatedFoo = await repo.update(foo.id, {
@@ -53,11 +52,9 @@ describe("FooRepo", () => {
 		});
 
 		expect(updatedFoo?.description).toBe("test description");
-
-		done();
 	});
 
-	it("should find all foos", async done => {
+	it("should find all foos", async () => {
 		const { id, ...foo } = fixtures.foo;
 
 		await createFoo(foo, fixtures.user);
@@ -66,11 +63,9 @@ describe("FooRepo", () => {
 		const foos = await repo.findAll();
 
 		expect(foos.length).toBe(2);
-
-		done();
 	});
 
-	async function createFoo(foo: Partial<FooModel>, user: any) {
+	const createFoo = async (foo: Partial<FooModel>, user: User) => {
 		return await repo.create(foo, user.id);
 	}
 

@@ -1,4 +1,4 @@
-import bus from "fruster-bus";
+import bus from "@fruster/bus";
 
 interface GetBarRequest {
 	barId: string;
@@ -24,13 +24,10 @@ class BarServiceClient {
 	/**
 	 * Gets bar by barId
 	 */
-	static async getBar(reqId: string, data: GetBarRequest): Promise<GetBarResponse> {
+	static async getBar(data: GetBarRequest): Promise<GetBarResponse> {
 		return (await bus.request<GetBarRequest, GetBarResponse>({
 			subject: BarServiceClient.endpoints.GET_BAR,
-			message: {
-				reqId,
-				data
-			}
+			message: { data }
 		})).data as GetBarResponse;
 	}
 

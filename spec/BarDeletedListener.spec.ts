@@ -1,13 +1,17 @@
 import { v4 } from "uuid";
 import { Db } from "mongodb";
-import { testBus as bus } from "fruster-bus";
-import frusterTestUtils from "fruster-test-utils";
+import { testBus } from "@fruster/bus";
+import frusterTestUtils from "@fruster/test-utils";
+
+import { LISTENER_SUBJECT } from "../lib/listeners/BarDeletedListener";
+import Foo from "../lib/models/Foo";
 import FooRepo from "../lib/repos/FooRepo";
+import BarDeletedRequest from "../lib/schemas/BarDeletedRequest";
+import BarDeletedResponse from "../lib/schemas/BarDeletedResponse";
 import errors from "../lib/errors";
+
 import fixtures from "./support/fixtures";
 import specConstants from "./support/spec-constants";
-import FooModel from "../lib/models/FooModel";
-import { LISTENER_SUBJECT, BarDeletedRequest, BarDeletedResponse } from "../lib/listeners/BarDeletedListener";
 
 describe("BarDeletedListener", () => {
 
@@ -22,46 +26,41 @@ describe("BarDeletedListener", () => {
 				repo = new FooRepo(db);
 			}));
 
-	it("should return BAD_REQUEST if received invalid data", async done => {
+	it("should return BAD_REQUEST if received invalid data", async () => {
 		try {
-			await bus.request({
+			await testBus.request({
 				subject: LISTENER_SUBJECT,
 				message: {
 					user: fixtures.user,
-					reqId: "reqId",
 					data: {}
 				}
 			});
 
-			done.fail();
-
-		} catch ({ status, error }) {
-			expect(status).toBe(400, "err.status");
-			expect(error.code).toBe(errors.badRequest().error.code, "err.code");
-
-			done();
+			fail();
+		} catch ({ status, error }: any) {
+			expect(status).toBe(400);
+			expect(error.code).toBe(errors.badRequest().error.code);
 		}
 	});
 
 	it("should be possible to delete foos by bar id", async () => {
 		const barId = v4();
 
-		await createFoo({ ...fixtures.foo, barId });
-		await createFoo({ ...fixtures.foo, barId });
+		await createFoo({ ...fixtures.foo, bar: { id: barId } });
+		await createFoo({ ...fixtures.foo, bar: { id: barId } });
 
-		const { status, data } = await bus.request<BarDeletedRequest, BarDeletedResponse>({
+		const { status, data } = await testBus.request<BarDeletedRequest, BarDeletedResponse>({
 			subject: LISTENER_SUBJECT,
 			message: {
-				reqId: "reqId",
-				data: { barId }
+				data: { id: barId }
 			}
 		});
 
-		expect(status).toBe(200, "status");
-		expect(data.deletedCount).toBe(2, "deleted count");
+		expect(status).toBe(200);
+		expect(data.deletedCount).toBe(2);
 	});
 
-	async function createFoo(foo: FooModel): Promise<FooModel> {
+	const createFoo = async (foo: Foo): Promise<Foo> => {
 		return await repo.create(foo, fixtures.user.id);
 	}
 });

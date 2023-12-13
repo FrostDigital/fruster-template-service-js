@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:14
+FROM mhart/alpine-node:20
 
 ARG SOURCE_VERSION=na
 ENV SOURCE_VERSION=$SOURCE_VERSION

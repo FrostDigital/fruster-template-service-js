@@ -1,5 +1,5 @@
-import bus from "fruster-bus";
-import { FrusterTestUtilsConnection } from "fruster-test-utils";
+import bus from "@fruster/bus";
+import { FrusterTestUtilsConnection } from "@fruster/test-utils";
 import constants from "../../lib/constants";
 import { start } from "../../fruster-template-service";
 

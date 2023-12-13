@@ -1,13 +1,14 @@
-import { FrusterRequest, FrusterResponse } from "fruster-bus";
-import * as log from "fruster-log";
+import { FrusterRequest, FrusterResponse } from "@fruster/bus";
+import { subscribe, injectable, inject } from "@fruster/decorators";
+import log from "@fruster/log";
+
 import FooRepo from "../repos/FooRepo";
-import FooModel from "../models/FooModel";
 import Publishes from "../Publishes";
-import { subscribe, injectable, inject } from "fruster-decorators";
 import FooWithBar from "../schemas/FooWithBar";
 import CreateFooRequest from "../schemas/CreateFooRequest";
 
 export const HTTP_SUBJECT = "http.post.foo";
+export const PERMISSIONS = ["foo.create"];
 
 /**
  * Handler to create foo.
@@ -23,17 +24,17 @@ class CreateFooHandler {
 	 */
 	@subscribe({
 		subject: HTTP_SUBJECT,
-		requestSchema: CreateFooRequest,
-		responseSchema: FooWithBar,
-		permissions: ["foo.create"],
+		permissions: PERMISSIONS,
 		docs: {
 			description: "Create a foo",
+			query: {},
+			params: {},
 			errors: {
 				INTERNAL_SERVER_ERROR: "Something unexpected happened"
 			}
 		}
 	})
-	async handleHttp({ reqId, data, user }: FrusterRequest<FooModel>): Promise<FrusterResponse<FooModel>> {
+	async handleHttp({ reqId, data, user }: FrusterRequest<CreateFooRequest>): Promise<FrusterResponse<FooWithBar>> {
 		const foo = await this.fooRepo.create(data, user.id);
 
 		Publishes.fooCreated(reqId, foo.id);
@@ -43,7 +44,13 @@ class CreateFooHandler {
 
 		return {
 			status: 201,
-			data: foo
+			data: {
+				...foo,
+				bar: {
+					id: "bar-id",
+					name: "bar name"
+				}
+			}
 		};
 	}
 }
