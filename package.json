@@ -19,13 +19,13 @@
 		"@fruster/decorators": "1.0.0-alpha.15",
 		"@fruster/runner": "1.0.0-alpha.16",
 		"@fruster/test-utils": "1.0.0-alpha.15",
-		"@types/jasmine": "^4.3.5",
+		"@types/jasmine": "^5.1.4",
 		"@types/mongodb": "2.2.28",
-		"@types/node": "^20.4.1",
-		"@types/uuid": "^9.0.2",
-		"jasmine": "^5.0.2",
+		"@types/node": "^20.10.4",
+		"@types/uuid": "^9.0.7",
+		"jasmine": "^5.1.0",
 		"jasmine-spec-reporter": "^7.0.0",
-		"nodemon": "^3.0.1",
+		"nodemon": "^3.0.2",
 		"nyc": "^15.1.0"
 	},
 	"nyc": {
